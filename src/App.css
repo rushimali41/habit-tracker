@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Global: force dark text color to ensure high contrast with colorful backgrounds
+   Exclude .gradient-text so decorative gradient headings keep their effect */
+body *:not(.gradient-text) {
+  color: #0b1220 !important;
+}
+
+/* Keep gradient-text working (transparent fill) even with the global override */
+.gradient-text {
+  -webkit-text-fill-color: transparent !important;
+}
