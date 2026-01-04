@@ -8,6 +8,7 @@ import {
   Star, Rocket, Gem, Crown, Target as TargetIcon, Sparkle
 } from 'lucide-react';
 
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [year, setYear] = useState(new Date().getFullYear());
