@@ -356,9 +356,9 @@ const App = () => {
 
       <div className="max-w-7xl mx-auto p-4 space-y-6">
         {/* Header */}
-        <header className="glass-card rounded-3xl p-8 shadow-2xl">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex-1">
+        <header className="glass-card rounded-3xl p-4 md:p-8 shadow-2xl">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div className="flex-1 w-full lg:w-auto">
               <div className="flex items-center gap-3 mb-2">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full blur-md opacity-60"></div>
@@ -366,9 +366,9 @@ const App = () => {
                     <Crown className="text-white" size={24} />
                   </div>
                 </div>
-                <h1 className="text-4xl font-black gradient-text">Royal Habit Tracker</h1>
+                <h1 className="text-2xl md:text-4xl font-black gradient-text">Royal Habit Tracker</h1>
               </div>
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mt-2">
                 <p className="text-gray-800 font-medium">{currentDate}</p>
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${
@@ -383,13 +383,13 @@ const App = () => {
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
-              <div className="flex bg-purple-100 rounded-2xl p-1 shadow-inner">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+              <div className="flex bg-purple-100 rounded-2xl p-1 shadow-inner w-full sm:w-auto overflow-x-auto">
                 {['dashboard', 'tracker', 'setup'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    className={`flex-1 sm:flex-none px-4 md:px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 whitespace-nowrap ${
                       activeTab === tab
                         ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
                         : 'text-gray-700 hover:text-gray-900'
@@ -405,7 +405,7 @@ const App = () => {
                 ))}
               </div>
               
-              <div className="text-right">
+              <div className="text-right w-full sm:w-auto flex flex-row sm:flex-col justify-between sm:justify-end items-center sm:items-end">
                 <div className="flex items-center justify-end gap-2">
                   <Clock className="text-purple-500" size={18} />
                   <div className="text-xl font-bold text-gray-900">{currentTime}</div>
@@ -427,7 +427,7 @@ const App = () => {
           
           <div className="mt-8 pt-6 border-t border-purple-200">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
+              <div className="w-full md:w-auto">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
                     <Sparkle className="text-white" size={20} />
@@ -438,12 +438,12 @@ const App = () => {
                   Royal discipline creates extraordinary habits
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="relative">
+              <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div className="relative flex-1 md:flex-none">
                   <select
                     value={year}
                     onChange={(e) => setYear(parseInt(e.target.value))}
-                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    className="w-full md:w-auto appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
                   >
                     {[2024, 2025, 2026, 2027, 2028].map(y => (
                       <option key={y} value={y} className="bg-white text-gray-800">{y}</option>
@@ -451,11 +451,11 @@ const App = () => {
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white" size={20} />
                 </div>
-                <div className="relative">
+                <div className="relative flex-1 md:flex-none">
                   <select
                     value={weekStartsOn}
                     onChange={(e) => setWeekStartsOn(e.target.value)}
-                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    className="w-full md:w-auto appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
                   >
                     <option value="Monday" className="bg-white text-gray-800">Week starts Monday</option>
                     <option value="Sunday" className="bg-white text-gray-800">Week starts Sunday</option>
@@ -552,8 +552,8 @@ const App = () => {
             </div>
 
             {/* Performance Graph */}
-            <div className="glass-card rounded-3xl p-8">
-              <div className="flex items-center justify-between mb-8">
+            <div className="glass-card rounded-3xl p-4 md:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl">
                     <BarChart3 className="text-white" size={24} />
@@ -579,9 +579,9 @@ const App = () => {
                   
                   return (
                     <div key={habit.id} className="space-y-3 bounce-in">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-3">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 w-full sm:w-auto">
+                          <div className="flex items-center gap-3 w-full sm:w-auto">
                             <span className="text-3xl">{habit.emoji}</span>
                             <div>
                               <div className="font-bold text-gray-900">{habit.name}</div>
@@ -598,7 +598,7 @@ const App = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
                           <div className="text-right">
                             <div className="text-2xl font-black text-gray-900">{Math.round(progress)}%</div>
                             <div className="text-sm font-medium text-gray-600">
@@ -627,7 +627,7 @@ const App = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="glass-card rounded-3xl p-8">
+            <div className="glass-card rounded-3xl p-4 md:p-8">
               <h2 className="text-2xl font-black text-gray-900 mb-6">Royal Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="group p-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border border-purple-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
@@ -687,8 +687,8 @@ const App = () => {
         {activeTab === 'tracker' && (
           <div className="space-y-6">
             <div className="glass-card rounded-3xl overflow-hidden">
-              <div className="p-8 bg-gradient-to-r from-purple-600 to-indigo-600">
-                <div className="flex items-center justify-between">
+              <div className="p-4 md:p-8 bg-gradient-to-r from-purple-600 to-indigo-600">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <Calendar className="text-white" size={28} />
                     <h2 className="text-2xl font-black text-white">
@@ -708,8 +708,8 @@ const App = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-purple-100">
-                      <th className="text-left p-6 font-black text-gray-700 sticky left-0 bg-gradient-to-r from-white to-purple-50">
-                        <div className="flex items-center gap-3">
+                      <th className="text-left p-3 md:p-6 font-black text-gray-700 sticky left-0 bg-gradient-to-r from-white to-purple-50 z-10 min-w-[200px]">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
                             <Calendar className="text-white" size={20} />
                           </div>
@@ -739,7 +739,7 @@ const App = () => {
                           </th>
                         );
                       })}
-                      <th className="text-center p-6 font-black text-gray-700 bg-gradient-to-r from-white to-purple-50">
+                      <th className="text-center p-3 md:p-6 font-black text-gray-700 bg-gradient-to-r from-white to-purple-50 min-w-[150px]">
                         Royal Stats
                       </th>
                     </tr>
@@ -751,15 +751,18 @@ const App = () => {
                       
                       return (
                         <tr key={habit.id} className="border-b border-purple-50 hover:bg-purple-50/50 transition-colors">
-                          <td className="p-6 sticky left-0 bg-gradient-to-r from-white to-purple-50">
-                            <div className="flex items-center gap-4">
-                              <div className="relative">
+                          <td className="p-3 md:p-6 sticky left-0 bg-gradient-to-r from-white to-purple-50 z-10">
+                            <div className="flex items-center gap-2 md:gap-4">
+                              <div className="relative hidden sm:block">
                                 <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-md opacity-50"></div>
                                 <span className="relative text-3xl">{habit.emoji}</span>
                               </div>
+                              <div className="relative sm:hidden text-2xl">
+                                {habit.emoji}
+                              </div>
                               <div>
-                                <div className="font-bold text-gray-800">{habit.name}</div>
-                                <div className="text-sm font-medium text-gray-600">
+                                <div className="font-bold text-gray-800 text-sm md:text-base">{habit.name}</div>
+                                <div className="text-xs md:text-sm font-medium text-gray-600">
                                   Target: {habit.target}/month
                                 </div>
                               </div>
@@ -800,7 +803,7 @@ const App = () => {
                             );
                           })}
                           
-                          <td className="p-6 bg-gradient-to-r from-white to-purple-50">
+                          <td className="p-3 md:p-6 bg-gradient-to-r from-white to-purple-50">
                             <div className="flex flex-col gap-4">
                               <div className="flex items-center justify-between">
                                 <span className="font-medium text-gray-600">Total:</span>
@@ -843,7 +846,7 @@ const App = () => {
             </div>
 
             {/* Stats Summary */}
-            <div className="glass-card rounded-3xl p-8">
+            <div className="glass-card rounded-3xl p-4 md:p-8">
               <h2 className="text-2xl font-black text-gray-800 mb-6">Royal Monthly Summary</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-4">
@@ -934,8 +937,8 @@ const App = () => {
         {/* Setup Tab */}
         {activeTab === 'setup' && (
           <div className="space-y-6">
-            <div className="glass-card rounded-3xl p-8">
-              <div className="flex items-center justify-between mb-8">
+            <div className="glass-card rounded-3xl p-4 md:p-8">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
@@ -957,12 +960,12 @@ const App = () => {
               </div>
               
               {/* Add New Habit */}
-              <div className="mb-8 p-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border-2 border-dashed border-purple-300">
+              <div className="mb-8 p-4 md:p-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border-2 border-dashed border-purple-300">
                 <h3 className="font-black text-gray-800 text-xl mb-6 flex items-center gap-3">
                   <Plus className="text-purple-500" size={24} />
                   Add New Royal Habit
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
                   <div className="md:col-span-2">
                     <label className="block text-sm font-bold text-gray-700 mb-2">
                       Royal Habit Name
@@ -1020,15 +1023,15 @@ const App = () => {
                   const stats = getHabitStats(habit.id, currentMonth);
                   
                   return (
-                    <div key={habit.id} className="flex items-center gap-4 p-6 border-2 border-purple-100 rounded-2xl hover:shadow-lg transition-all">
+                    <div key={habit.id} className="flex flex-col md:flex-row items-stretch md:items-center gap-4 p-4 md:p-6 border-2 border-purple-100 rounded-2xl hover:shadow-lg transition-all relative">
                       <button
                         onClick={() => deleteHabit(habit.id)}
-                        className="p-3 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors"
+                        className="absolute top-4 right-4 md:static p-2 md:p-3 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors z-10"
                       >
                         <Trash2 size={20} />
                       </button>
                       
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pt-8 md:pt-0">
                         <div className="flex items-center gap-4">
                           <input
                             type="text"
@@ -1083,7 +1086,7 @@ const App = () => {
             </div>
 
             {/* Emoji Levels Configuration */}
-            <div className="glass-card rounded-3xl p-8">
+            <div className="glass-card rounded-3xl p-4 md:p-8">
               <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
                   <Gem className="text-white" size={24} />
@@ -1098,8 +1101,8 @@ const App = () => {
               
               <div className="space-y-4">
                 {emojiLevels.map((level, index) => (
-                  <div key={index} className="flex items-center gap-6 p-6 border-2 border-purple-100 rounded-2xl">
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div key={index} className="flex flex-col md:flex-row items-center gap-4 md:gap-6 p-4 md:p-6 border-2 border-purple-100 rounded-2xl">
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">
                           Completion Threshold (%)
@@ -1155,8 +1158,8 @@ const App = () => {
         )}
 
         {/* Footer */}
-        <footer className="glass-card rounded-3xl p-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <footer className="glass-card rounded-3xl p-4 md:p-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div className="flex items-center gap-4">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
