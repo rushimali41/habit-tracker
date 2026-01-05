@@ -6,13 +6,14 @@ import {
   Trophy, Zap, Sparkles, Heart, Moon, Sun, Download, Upload,
   ChevronDown, ChevronUp, TrendingUp, Award, Clock,
   Star, Rocket, Gem, Crown, Target as TargetIcon, Sparkle,
-  LogIn, LogOut, User, Database
+  LogIn, LogOut, User, Database, Menu, X, Smartphone,
+  Tablet, Monitor
 } from 'lucide-react';
 
 // Firebase imports
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -64,11 +65,27 @@ const App = () => {
   const [syncStatus, setSyncStatus] = useState('ready');
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [screenSize, setScreenSize] = useState('desktop');
 
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentDay = today.getDate();
   const currentYear = today.getFullYear();
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) setScreenSize('mobile');
+      else if (width < 1024) setScreenSize('tablet');
+      else setScreenSize('desktop');
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Firebase Authentication
   const signInWithGoogle = async () => {
@@ -477,6 +494,23 @@ const App = () => {
     return Math.round((getTotalCompletedToday() / habits.length) * 100);
   };
 
+  // Mobile menu handler
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (screenSize === 'mobile') {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  // Screen size indicator
+  const getScreenSizeIcon = () => {
+    switch(screenSize) {
+      case 'mobile': return <Smartphone className="text-purple-500" size={16} />;
+      case 'tablet': return <Tablet className="text-purple-500" size={16} />;
+      default: return <Monitor className="text-purple-500" size={16} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 text-gray-900 font-sans">
       <style>{`
@@ -516,162 +550,268 @@ const App = () => {
           70% { transform: scale(1.1); }
           100% { transform: scale(1); opacity: 1; }
         }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}</style>
 
-      <div className="max-w-7xl mx-auto p-4 space-y-6">
+      <div className="max-w-7xl mx-auto p-2 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
         {/* Header */}
-        <header className="glass-card rounded-3xl p-8 shadow-2xl">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full blur-md opacity-60"></div>
-                  <div className="relative bg-gradient-to-r from-purple-500 to-indigo-500 p-3 rounded-2xl">
-                    <Crown className="text-white" size={24} />
-                  </div>
-                </div>
-                <h1 className="text-4xl font-black gradient-text">Royal Habit Tracker</h1>
-              </div>
-              <div className="flex items-center gap-4 mt-2">
-                <p className="text-gray-800 font-medium">{currentDate}</p>
-                <div className="flex items-center gap-2">
-                  <div className={`w-3 h-3 rounded-full ${
-                    syncStatus === 'saving' ? 'bg-yellow-400 animate-pulse ring-2 ring-yellow-200' :
-                    syncStatus === 'saved' ? 'bg-green-400 ring-2 ring-green-200' :
-                    syncStatus === 'error' ? 'bg-red-400 ring-2 ring-red-200' :
-                    'bg-purple-400 ring-2 ring-purple-200'
-                  }`}></div>
-                  <span className="text-sm font-medium text-gray-600">
-                    {syncStatus === 'saving' ? 'Syncing to cloud...' : 
-                     syncStatus === 'saved' ? user ? 'Synced to cloud' : 'Saved locally' :
-                     syncStatus === 'error' ? 'Sync failed' :
-                     user ? 'Connected to cloud' : 'Ready (offline)'}
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              {/* Auth Section */}
-              <div className="flex items-center gap-3">
-                {user ? (
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl">
-                      <User size={16} />
-                      <span className="text-sm">{user.email?.split('@')[0]}</span>
+        <header className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
+          <div className="flex flex-col gap-4">
+            {/* Top Row - Logo and Controls */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full blur-md opacity-60"></div>
+                    <div className="relative bg-gradient-to-r from-purple-500 to-indigo-500 p-2 sm:p-3 rounded-2xl">
+                      <Crown className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <button
-                      onClick={handleSignOut}
-                      className="px-4 py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
-                    >
-                      <LogOut size={16} />
-                    </button>
                   </div>
-                ) : (
-                  <button
-                    onClick={signInWithGoogle}
-                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl hover:shadow-lg transition-shadow flex items-center gap-2"
-                  >
-                    <LogIn size={16} />
-                    <span>Sign in with Google</span>
-                  </button>
-                )}
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black gradient-text">Royal Habit Tracker</h1>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm sm:text-base text-gray-800 font-medium">{currentDate}</p>
+                      <div className="flex items-center gap-1">
+                        {getScreenSizeIcon()}
+                        <span className="text-xs text-gray-600 hidden sm:inline">({screenSize})</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div className="flex bg-purple-100 rounded-2xl p-1 shadow-inner">
-                {['dashboard', 'tracker', 'setup'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${
-                      activeTab === tab
-                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
-                        : 'text-gray-700 hover:text-gray-900'
-                    }`}
-                  >
+              {/* Mobile Menu Button */}
+              <div className="sm:hidden">
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2 bg-purple-100 rounded-xl text-purple-600 hover:bg-purple-200 transition-colors"
+                >
+                  {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
+
+              {/* Desktop Controls */}
+              <div className="hidden sm:flex items-center gap-3 lg:gap-4">
+                {/* Auth Section */}
+                <div className="hidden lg:flex items-center gap-3">
+                  {user ? (
                     <div className="flex items-center gap-2">
-                      {tab === 'dashboard' && <LayoutDashboard size={16} />}
-                      {tab === 'tracker' && <Calendar size={16} />}
-                      {tab === 'setup' && <Settings size={16} />}
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl">
+                        <User size={14} />
+                        <span className="text-xs">{user.email?.split('@')[0]}</span>
+                      </div>
+                      <button
+                        onClick={handleSignOut}
+                        className="p-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                      >
+                        <LogOut size={14} />
+                      </button>
                     </div>
-                  </button>
-                ))}
-              </div>
-              
-              <div className="text-right">
-                <div className="flex items-center justify-end gap-2">
-                  <Clock className="text-purple-500" size={18} />
-                  <div className="text-xl font-bold text-gray-900">{currentTime}</div>
+                  ) : (
+                    <button
+                      onClick={signInWithGoogle}
+                      className="px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl hover:shadow-lg transition-shadow flex items-center gap-2"
+                    >
+                      <LogIn size={14} />
+                      <span className="hidden lg:inline">Sign in</span>
+                    </button>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="h-2 flex-1 bg-purple-200 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
-                      style={{ width: `${getTodayPercentage()}%` }}
-                    ></div>
+                
+                <div className="text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <Clock className="text-purple-500 w-4 h-4 sm:w-5 sm:h-5" />
+                    <div className="text-lg sm:text-xl font-bold text-gray-900">{currentTime}</div>
                   </div>
-                  <span className="text-sm font-bold text-gray-800">
-                    {getTotalCompletedToday()}/{habits.length}
-                  </span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="h-2 flex-1 bg-purple-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
+                        style={{ width: `${getTodayPercentage()}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-gray-800">
+                      {getTotalCompletedToday()}/{habits.length}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div className="mt-8 pt-6 border-t border-purple-200">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
-                    <Sparkle className="text-white" size={20} />
+
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+              <div className="sm:hidden bg-purple-50 rounded-xl p-4 animate-slideDown">
+                <div className="flex flex-col gap-3">
+                  {/* Mobile Tabs */}
+                  <div className="flex bg-purple-100 rounded-xl p-1">
+                    {['dashboard', 'tracker', 'setup'].map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => handleTabClick(tab)}
+                        className={`flex-1 px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
+                          activeTab === tab
+                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow'
+                            : 'text-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-center gap-1">
+                          {tab === 'dashboard' && <LayoutDashboard size={14} />}
+                          {tab === 'tracker' && <Calendar size={14} />}
+                          {tab === 'setup' && <Settings size={14} />}
+                          {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900">{quote}</h2>
+                  
+                  {/* Mobile Auth */}
+                  <div className="flex gap-2">
+                    {user ? (
+                      <>
+                        <div className="flex-1 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-lg">
+                          <User size={14} />
+                          <span className="text-xs truncate">{user.email?.split('@')[0]}</span>
+                        </div>
+                        <button
+                          onClick={handleSignOut}
+                          className="px-3 py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold rounded-lg"
+                        >
+                          <LogOut size={14} />
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={signInWithGoogle}
+                        className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg flex items-center justify-center gap-2"
+                      >
+                        <LogIn size={14} />
+                        <span>Sign in with Google</span>
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Sync Status */}
+                  <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg">
+                    <div className={`w-2 h-2 rounded-full ${
+                      syncStatus === 'saving' ? 'bg-yellow-400 animate-pulse' :
+                      syncStatus === 'saved' ? 'bg-green-400' :
+                      syncStatus === 'error' ? 'bg-red-400' :
+                      'bg-purple-400'
+                    }`}></div>
+                    <span className="text-xs text-gray-600">
+                      {syncStatus === 'saving' ? 'Syncing...' : 
+                       syncStatus === 'saved' ? user ? 'Synced' : 'Saved' :
+                       syncStatus === 'error' ? 'Sync failed' :
+                       user ? 'Connected' : 'Ready'}
+                    </span>
+                  </div>
                 </div>
-                <p className="text-gray-700 font-medium mt-2">
-                  {user 
-                    ? `Your royal data is safely stored in the cloud! Access from any device.` 
-                    : `Your progress is saved locally. Sign in to sync across devices.`}
-                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="relative">
+            )}
+
+            {/* Bottom Row - Quote and Controls */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-purple-200">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
+                    <Sparkle className="text-white w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">{quote}</h2>
+                    <p className="text-sm sm:text-base text-gray-700 font-medium mt-1">
+                      {user 
+                        ? `Your royal data is safely stored in the cloud!` 
+                        : `Sign in to sync across devices.`}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Desktop Tabs and Controls */}
+              <div className="hidden sm:flex items-center gap-2 lg:gap-3">
+                <div className="flex bg-purple-100 rounded-xl p-1">
+                  {['dashboard', 'tracker', 'setup'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-4 py-2 rounded-lg text-xs lg:text-sm font-bold transition-all duration-300 ${
+                        activeTab === tab
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow'
+                          : 'text-gray-700 hover:text-gray-900'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1 lg:gap-2">
+                        {tab === 'dashboard' && <LayoutDashboard size={14} className="lg:w-4 lg:h-4" />}
+                        {tab === 'tracker' && <Calendar size={14} className="lg:w-4 lg:h-4" />}
+                        {tab === 'setup' && <Settings size={14} className="lg:w-4 lg:h-4" />}
+                        <span className="hidden lg:inline">{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
+                        <span className="lg:hidden">{tab.charAt(0).toUpperCase()}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <select
+                      value={year}
+                      onChange={(e) => {
+                        setYear(parseInt(e.target.value));
+                        saveData('year', parseInt(e.target.value));
+                      }}
+                      className="appearance-none px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg lg:rounded-xl text-xs lg:text-sm shadow hover:shadow-lg transition-shadow cursor-pointer"
+                    >
+                      {[2024, 2025, 2026, 2027, 2028].map(y => (
+                        <option key={y} value={y} className="bg-white text-gray-800">{y}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white w-3 h-3 lg:w-4 lg:h-4" />
+                  </div>
+                  
+                  {user && (
+                    <button
+                      onClick={syncWithFirebase}
+                      className="px-3 py-2 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-lg lg:rounded-xl hover:shadow-lg transition-shadow flex items-center gap-1"
+                      disabled={syncStatus === 'saving'}
+                    >
+                      <RefreshCw size={14} className={syncStatus === 'saving' ? 'animate-spin' : ''} />
+                      <span className="hidden lg:inline">Sync</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {/* Mobile Controls */}
+              <div className="sm:hidden flex items-center gap-2 w-full">
+                <div className="relative flex-1">
                   <select
                     value={year}
                     onChange={(e) => {
                       setYear(parseInt(e.target.value));
                       saveData('year', parseInt(e.target.value));
                     }}
-                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    className="appearance-none w-full px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg text-xs shadow"
                   >
                     {[2024, 2025, 2026, 2027, 2028].map(y => (
                       <option key={y} value={y} className="bg-white text-gray-800">{y}</option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white" size={20} />
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white w-3 h-3" />
                 </div>
-                <div className="relative">
-                  <select
-                    value={weekStartsOn}
-                    onChange={(e) => {
-                      setWeekStartsOn(e.target.value);
-                      saveData('weekStartsOn', e.target.value);
-                    }}
-                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-                  >
-                    <option value="Monday" className="bg-white text-gray-800">Week starts Monday</option>
-                    <option value="Sunday" className="bg-white text-gray-800">Week starts Sunday</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white" size={20} />
-                </div>
+                
                 {user && (
                   <button
                     onClick={syncWithFirebase}
-                    className="px-4 py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow flex items-center gap-2"
+                    className="px-3 py-2 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-lg hover:shadow-lg transition-shadow"
                     disabled={syncStatus === 'saving'}
                   >
-                    <RefreshCw size={18} className={syncStatus === 'saving' ? 'animate-spin' : ''} />
-                    <span>Sync Now</span>
+                    <RefreshCw size={14} className={syncStatus === 'saving' ? 'animate-spin' : ''} />
                   </button>
                 )}
               </div>
@@ -680,34 +820,34 @@ const App = () => {
         </header>
 
         {isLoading ? (
-          <div className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mb-4"></div>
-            <p className="text-lg font-medium text-gray-600">Loading your royal data from cloud...</p>
+          <div className="glass-card rounded-2xl sm:rounded-3xl p-8 sm:p-12 flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-purple-500 mb-4"></div>
+            <p className="text-base sm:text-lg font-medium text-gray-600">Loading your royal data from cloud...</p>
           </div>
         ) : (
           <>
             {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Cloud Status Card */}
                 {!user && (
-                  <div className="glass-card rounded-3xl p-6 border-2 border-dashed border-purple-300">
-                    <div className="flex items-center gap-6">
+                  <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-dashed border-purple-300">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
-                        <div className="relative p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                          <Cloud className="text-white" size={28} />
+                        <div className="relative p-3 sm:p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                          <Cloud className="text-white w-6 h-6 sm:w-7 sm:h-7" />
                         </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-gray-800 text-lg mb-2">👑 Go Royal Cloud-Powered!</h3>
-                        <p className="text-gray-600">
-                          Sign in to save your royal progress across all devices. Never lose your streaks!
+                      <div className="flex-1 text-center sm:text-left">
+                        <h3 className="font-bold text-gray-800 text-base sm:text-lg mb-1">👑 Go Royal Cloud-Powered!</h3>
+                        <p className="text-sm sm:text-base text-gray-600">
+                          Sign in to save your royal progress across all devices.
                         </p>
                       </div>
                       <button
                         onClick={signInWithGoogle}
-                        className="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                        className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold rounded-lg sm:rounded-xl hover:shadow-lg transition-shadow text-sm sm:text-base"
                       >
                         Sign in with Google
                       </button>
@@ -716,21 +856,21 @@ const App = () => {
                 )}
 
                 {/* Stats Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="glass-card rounded-3xl p-6 border-l-4 border-l-purple-400">
-                    <div className="flex items-center gap-4 mb-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+                  <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-purple-400">
+                    <div className="flex items-center gap-3 mb-4">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-lg opacity-50 pulse-ring"></div>
-                        <div className="relative p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                          <Target className="text-white" size={24} />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur opacity-50"></div>
+                        <div className="relative p-2 sm:p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                          <Target className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-600">Overall Progress</div>
-                        <div className="text-3xl font-black text-gray-900">{getOverallProgress()}%</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-600">Progress</div>
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900">{getOverallProgress()}%</div>
                       </div>
                     </div>
-                    <div className="h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
+                    <div className="h-2 sm:h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
                         style={{ width: `${getOverallProgress()}%` }}
@@ -738,129 +878,127 @@ const App = () => {
                     </div>
                   </div>
                   
-                  <div className="glass-card rounded-3xl p-6 border-l-4 border-l-violet-400">
-                    <div className="flex items-center gap-4 mb-6">
+                  <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-violet-400">
+                    <div className="flex items-center gap-3 mb-4">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-full blur-lg opacity-50"></div>
-                        <div className="relative p-3 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
-                          <Flame className="text-white" size={24} />
+                        <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-full blur opacity-50"></div>
+                        <div className="relative p-2 sm:p-3 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
+                          <Flame className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-600">Current Streak</div>
-                        <div className="text-3xl font-black text-gray-900 flex items-center gap-3">
+                        <div className="text-xs sm:text-sm font-semibold text-gray-600">Current Streak</div>
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 flex items-center gap-2">
                           {getCurrentStreak()}
-                          {getCurrentStreak() > 0 && <Flame size={24} className="text-violet-400" fill="currentColor" />}
+                          {getCurrentStreak() > 0 && <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" fill="currentColor" />}
                         </div>
                       </div>
                     </div>
-                    <div className="text-sm font-medium text-gray-700">
-                      {getCurrentStreak() > 0 ? '🔥 Keep the royal flame burning!' : 'Start your royal streak today!'}
+                    <div className="text-xs sm:text-sm font-medium text-gray-700">
+                      {getCurrentStreak() > 0 ? '🔥 Keep going!' : 'Start today!'}
                     </div>
                   </div>
                   
-                  <div className="glass-card rounded-3xl p-6 border-l-4 border-l-indigo-400">
-                    <div className="flex items-center gap-4 mb-6">
+                  <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-indigo-400">
+                    <div className="flex items-center gap-3 mb-4">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-full blur-lg opacity-50"></div>
-                        <div className="relative p-3 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-xl">
-                          <Trophy className="text-white" size={24} />
+                        <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-full blur opacity-50"></div>
+                        <div className="relative p-2 sm:p-3 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-xl">
+                          <Trophy className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-600">Best Streak</div>
-                        <div className="text-3xl font-black text-gray-900">{getBestStreak()}</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-600">Best Streak</div>
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900">{getBestStreak()}</div>
                       </div>
                     </div>
-                    <div className="text-sm font-medium text-gray-600">
-                      {getBestStreak() > 0 ? '👑 Your royal record!' : 'Set your first royal record!'}
+                    <div className="text-xs sm:text-sm font-medium text-gray-600">
+                      {getBestStreak() > 0 ? '👑 Your record!' : 'Set record!'}
                     </div>
                   </div>
                   
-                  <div className="glass-card rounded-3xl p-6 border-l-4 border-l-fuchsia-400">
-                    <div className="flex items-center gap-4 mb-6">
+                  <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-fuchsia-400">
+                    <div className="flex items-center gap-3 mb-4">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-full blur-lg opacity-50"></div>
-                        <div className="relative p-3 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-xl">
-                          <TrendingUp className="text-white" size={24} />
+                        <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-full blur opacity-50"></div>
+                        <div className="relative p-2 sm:p-3 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-xl">
+                          <TrendingUp className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-600">Today's Progress</div>
-                        <div className="text-3xl font-black text-gray-900">{getTodayPercentage()}%</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-600">Today</div>
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900">{getTodayPercentage()}%</div>
                       </div>
                     </div>
-                    <div className="text-sm font-medium text-gray-700">
-                      {getTotalCompletedToday()} of {habits.length} habits completed
+                    <div className="text-xs sm:text-sm font-medium text-gray-700">
+                      {getTotalCompletedToday()}/{habits.length} done
                     </div>
                   </div>
                 </div>
 
                 {/* Performance Graph */}
-                <div className="glass-card rounded-3xl p-8">
-                  <div className="flex items-center justify-between mb-8">
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                      <div className="p-3 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl">
-                        <BarChart3 className="text-white" size={24} />
+                      <div className="p-2 sm:p-3 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl">
+                        <BarChart3 className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-black text-gray-900">Royal Performance Overview</h2>
-                        <p className="text-gray-700 font-medium">
+                        <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">Performance Overview</h2>
+                        <p className="text-sm sm:text-base text-gray-700 font-medium">
                           {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} Progress
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Crown className="text-yellow-400 fill-current" size={20} />
-                      <span className="font-bold text-gray-700">Royal Habits: {habits.length}</span>
+                      <Crown className="text-yellow-400 fill-current w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-sm sm:text-base font-bold text-gray-700">Habits: {habits.length}</span>
                     </div>
                   </div>
                   
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     {habits.map(habit => {
                       const stats = getHabitStats(habit.id, currentMonth);
                       const progress = Math.min(stats.progress, 100);
                       const emoji = getProgressEmoji(progress);
                       
                       return (
-                        <div key={habit.id} className="space-y-3 bounce-in">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <div className="flex items-center gap-3">
-                                <span className="text-3xl">{habit.emoji}</span>
-                                <div>
-                                  <div className="font-bold text-gray-900">{habit.name}</div>
-                                  <div className="flex items-center gap-3 text-sm">
-                                    <span className="font-medium text-gray-600">
-                                      Target: {habit.target}/month
+                        <div key={habit.id} className="space-y-2 sm:space-y-3">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl sm:text-3xl">{habit.emoji}</span>
+                              <div>
+                                <div className="font-bold text-gray-900 text-sm sm:text-base">{habit.name}</div>
+                                <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                                  <span className="font-medium text-gray-600">
+                                    Target: {habit.target}/month
+                                  </span>
+                                  {stats.currentStreak > 0 && (
+                                    <span className="flex items-center gap-1 font-medium text-violet-600">
+                                      <Flame size={12} /> {stats.currentStreak}d streak
                                     </span>
-                                    {stats.currentStreak > 0 && (
-                                      <span className="flex items-center gap-1 font-medium text-violet-600">
-                                        <Flame size={14} /> {stats.currentStreak}d streak
-                                      </span>
-                                    )}
-                                  </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 sm:gap-4">
                               <div className="text-right">
-                                <div className="text-2xl font-black text-gray-900">{Math.round(progress)}%</div>
-                                <div className="text-sm font-medium text-gray-600">
+                                <div className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">{Math.round(progress)}%</div>
+                                <div className="text-xs sm:text-sm font-medium text-gray-600">
                                   {stats.total}/{habit.target} days
                                 </div>
                               </div>
-                              <span className="text-4xl">{emoji}</span>
+                              <span className="text-3xl sm:text-4xl">{emoji}</span>
                             </div>
                           </div>
                           <div className="relative">
-                            <div className="h-4 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
+                            <div className="h-3 sm:h-4 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                               <div 
                                 className={`h-full rounded-full bg-gradient-to-r ${habit.color}`}
                                 style={{ width: `${progress}%` }}
                               ></div>
                             </div>
-                            <div className="flex justify-between mt-2 text-sm font-medium">
+                            <div className="flex justify-between mt-1 sm:mt-2 text-xs sm:text-sm font-medium">
                               <span className="text-gray-600">0%</span>
                               <span className="text-gray-600">100%</span>
                             </div>
@@ -872,47 +1010,47 @@ const App = () => {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="glass-card rounded-3xl p-8">
-                  <h2 className="text-2xl font-black text-gray-900 mb-6">Royal Quick Actions</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="group p-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border border-purple-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
-                      <div className="flex items-center gap-6">
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900 mb-4 sm:mb-6">Quick Actions</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="group p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl sm:rounded-2xl border border-purple-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
-                          <div className="relative p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                            <Download className="text-white" size={28} />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur opacity-50 group-hover:blur-xl transition-all"></div>
+                          <div className="relative p-3 sm:p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                            <Download className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="font-bold text-gray-900 text-lg mb-1">Export Royal Data</div>
-                          <div className="text-gray-600">
-                            Download all your progress as JSON
+                        <div className="flex-1 text-center sm:text-left">
+                          <div className="font-bold text-gray-900 text-base sm:text-lg mb-1">Export Data</div>
+                          <div className="text-sm text-gray-600">
+                            Download your progress
                           </div>
                         </div>
                         <button
                           onClick={exportData}
-                          className="px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                          className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-lg hover:shadow-lg transition-shadow text-sm"
                         >
                           Export
                         </button>
                       </div>
                     </div>
                     
-                    <div className="group p-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border border-violet-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
-                      <div className="flex items-center gap-6">
+                    <div className="group p-4 sm:p-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl sm:rounded-2xl border border-violet-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
-                          <div className="relative p-4 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
-                            <Upload className="text-white" size={28} />
+                          <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl blur opacity-50 group-hover:blur-xl transition-all"></div>
+                          <div className="relative p-3 sm:p-4 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
+                            <Upload className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="font-bold text-gray-900 text-lg mb-1">Import Royal Data</div>
-                          <div className="text-gray-700">
-                            Restore from backup file
+                        <div className="flex-1 text-center sm:text-left">
+                          <div className="font-bold text-gray-900 text-base sm:text-lg mb-1">Import Data</div>
+                          <div className="text-sm text-gray-700">
+                            Restore from backup
                           </div>
                         </div>
-                        <label className="px-6 py-3 bg-gradient-to-r from-violet-400 to-purple-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow cursor-pointer">
+                        <label className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-violet-400 to-purple-400 text-white font-bold rounded-lg hover:shadow-lg transition-shadow cursor-pointer text-center text-sm">
                           Import
                           <input
                             type="file"
@@ -924,31 +1062,31 @@ const App = () => {
                       </div>
                     </div>
 
-                    <div className="group p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
-                      <div className="flex items-center gap-6">
+                    <div className="group p-4 sm:p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl border border-green-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
-                          <div className="relative p-4 bg-gradient-to-r from-green-400 to-emerald-400 rounded-xl">
-                            <Database className="text-white" size={28} />
+                          <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-xl blur opacity-50 group-hover:blur-xl transition-all"></div>
+                          <div className="relative p-3 sm:p-4 bg-gradient-to-r from-green-400 to-emerald-400 rounded-xl">
+                            <Database className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="font-bold text-gray-900 text-lg mb-1">Cloud Sync</div>
-                          <div className="text-gray-700">
-                            {user ? 'Your royal data is synced' : 'Sign in to sync across devices'}
+                        <div className="flex-1 text-center sm:text-left">
+                          <div className="font-bold text-gray-900 text-base sm:text-lg mb-1">Cloud Sync</div>
+                          <div className="text-sm text-gray-700">
+                            {user ? 'Synced to cloud' : 'Sign in to sync'}
                           </div>
                         </div>
                         {user ? (
                           <button
                             onClick={syncWithFirebase}
-                            className="px-6 py-3 bg-gradient-to-r from-green-400 to-emerald-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                            className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-400 text-white font-bold rounded-lg hover:shadow-lg transition-shadow text-sm"
                           >
                             Sync Now
                           </button>
                         ) : (
                           <button
                             onClick={signInWithGoogle}
-                            className="px-6 py-3 bg-gradient-to-r from-green-400 to-emerald-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                            className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-400 text-white font-bold rounded-lg hover:shadow-lg transition-shadow text-sm"
                           >
                             Sign In
                           </button>
@@ -962,242 +1100,287 @@ const App = () => {
 
             {/* Tracker Tab */}
             {activeTab === 'tracker' && (
-              <div className="space-y-6">
-                <div className="glass-card rounded-3xl overflow-hidden">
-                  <div className="p-8 bg-gradient-to-r from-purple-600 to-indigo-600">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <Calendar className="text-white" size={28} />
-                        <h2 className="text-2xl font-black text-white">
-                          {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} {year} - Royal Habit Tracker
-                        </h2>
+              <div className="space-y-4 sm:space-y-6">
+                <div className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden">
+                  <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-r from-purple-600 to-indigo-600">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <Calendar className="text-white w-6 h-6 sm:w-7 sm:h-7" />
+                        <div>
+                          <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-white">Habit Tracker</h2>
+                          <p className="text-white/90 text-sm sm:text-base">
+                            {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} {year}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl">
-                        <TargetIcon className="text-white" size={18} />
-                        <span className="text-white font-bold">
-                          Click on days to mark royal habits
-                        </span>
+                      <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg">
+                        <TargetIcon className="text-white w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="text-white font-bold text-xs sm:text-sm">Tap days to mark habits</span>
                       </div>
                     </div>
                   </div>
                   
+                  {/* Responsive Tracker Table */}
                   <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-purple-100">
-                          <th className="text-left p-6 font-black text-gray-700 sticky left-0 bg-gradient-to-r from-white to-purple-50">
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
-                                <Calendar className="text-white" size={20} />
+                    <div className="min-w-[800px] sm:min-w-full">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-purple-100">
+                            <th className="text-left p-3 sm:p-4 lg:p-6 font-black text-gray-700 sticky left-0 bg-gradient-to-r from-white to-purple-50 z-10">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
+                                  <Calendar className="text-white w-4 h-4 sm:w-5 sm:h-5" />
+                                </div>
+                                <span className="text-sm sm:text-base lg:text-lg">Habits</span>
                               </div>
-                              <span className="text-lg">Royal Habits</span>
-                            </div>
-                          </th>
-                          {Array.from({ length: getDaysInMonth(currentMonth, year) }, (_, i) => i + 1).map(day => {
-                            const isToday = day === currentDay && year === currentYear && currentMonth === today.getMonth();
-                            const dayOfWeek = getDayOfWeek(day, currentMonth, year);
-                            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                            </th>
+                            {Array.from({ length: getDaysInMonth(currentMonth, year) }, (_, i) => i + 1).map(day => {
+                              const isToday = day === currentDay && year === currentYear && currentMonth === today.getMonth();
+                              const dayOfWeek = getDayOfWeek(day, currentMonth, year);
+                              const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                              
+                              return (
+                                <th
+                                  key={day}
+                                  className={`text-center p-1.5 sm:p-2 lg:p-3 font-bold ${
+                                    isToday 
+                                      ? 'bg-gradient-to-r from-purple-400 to-indigo-400 text-white' 
+                                      : isWeekend
+                                      ? 'text-purple-400'
+                                      : 'text-gray-700'
+                                  }`}
+                                >
+                                  <div className="text-xs sm:text-sm lg:text-base">{day}</div>
+                                  <div className="text-[10px] sm:text-xs font-medium">
+                                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'][dayOfWeek]}
+                                  </div>
+                                </th>
+                              );
+                            })}
+                            <th className="text-center p-3 sm:p-4 lg:p-6 font-black text-gray-700 bg-gradient-to-r from-white to-purple-50 sticky right-0">
+                              <span className="text-sm sm:text-base">Stats</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {habits.slice(0, showHiddenRows ? habits.length : (screenSize === 'mobile' ? 5 : 7)).map((habit) => {
+                            const stats = getHabitStats(habit.id, currentMonth);
+                            const emoji = getProgressEmoji(stats.progress);
                             
                             return (
-                              <th
-                                key={day}
-                                className={`text-center p-3 font-bold ${
-                                  isToday 
-                                    ? 'bg-gradient-to-r from-purple-400 to-indigo-400 text-white' 
-                                    : isWeekend
-                                    ? 'text-purple-400'
-                                    : 'text-gray-700'
-                                }`}
-                              >
-                                <div className="text-lg">{day}</div>
-                                <div className="text-xs font-medium">
-                                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayOfWeek]}
-                                </div>
-                              </th>
+                              <tr key={habit.id} className="border-b border-purple-50 hover:bg-purple-50/50 transition-colors">
+                                <td className="p-3 sm:p-4 lg:p-6 sticky left-0 bg-gradient-to-r from-white to-purple-50 z-10">
+                                  <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                                    <div className="relative">
+                                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur opacity-50"></div>
+                                      <span className="relative text-xl sm:text-2xl lg:text-3xl">{habit.emoji}</span>
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="font-bold text-gray-800 text-sm sm:text-base truncate">{habit.name}</div>
+                                      <div className="text-xs sm:text-sm font-medium text-gray-600">
+                                        Target: {habit.target}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                
+                                {Array.from({ length: getDaysInMonth(currentMonth, year) }, (_, i) => i + 1).map(day => {
+                                  const key = `${habit.id}-${year}-${currentMonth}-${day}`;
+                                  const isCompleted = completions[key];
+                                  const isToday = day === currentDay && year === currentYear && currentMonth === today.getMonth();
+                                  const isFuture = new Date(year, currentMonth, day) > today;
+                                  
+                                  return (
+                                    <td key={day} className="p-0.5 sm:p-1 lg:p-2">
+                                      <button
+                                        onClick={() => !isFuture && toggleCompletion(habit.id, day, currentMonth)}
+                                        disabled={isFuture}
+                                        className={`
+                                          w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-200
+                                          ${isCompleted
+                                            ? 'bg-gradient-to-br from-purple-400 to-indigo-400 text-white shadow hover:shadow-lg'
+                                            : isToday
+                                            ? 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 shadow'
+                                            : 'bg-gradient-to-br from-purple-50 to-indigo-50 text-gray-500 hover:shadow'
+                                          }
+                                          ${isFuture ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
+                                        `}
+                                      >
+                                        {isCompleted ? (
+                                          <CheckCircle2 size={screenSize === 'mobile' ? 16 : 20} strokeWidth={2.5} />
+                                        ) : isFuture ? (
+                                          <span className="text-xs font-bold">-</span>
+                                        ) : (
+                                          <span className="text-base sm:text-lg font-bold">+</span>
+                                        )}
+                                      </button>
+                                    </td>
+                                  );
+                                })}
+                                
+                                <td className="p-3 sm:p-4 lg:p-6 sticky right-0 bg-gradient-to-r from-white to-purple-50">
+                                  <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-medium text-gray-600 text-xs sm:text-sm">Total:</span>
+                                      <span className="font-black text-gray-800 text-base sm:text-lg lg:text-xl">{stats.total}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-medium text-gray-600 text-xs sm:text-sm">Streak:</span>
+                                      <div className="flex items-center gap-1">
+                                        <Flame size={14} className={stats.currentStreak > 0 ? 'text-violet-400' : 'text-purple-400'} />
+                                        <span className="font-bold text-gray-800 text-sm sm:text-base lg:text-lg">{stats.currentStreak}</span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-medium text-gray-600 text-xs sm:text-sm">Progress:</span>
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xl sm:text-2xl">{emoji}</span>
+                                        <span className="font-black text-gray-800 text-base sm:text-lg lg:text-xl">{Math.round(stats.progress)}%</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
                             );
                           })}
-                          <th className="text-center p-6 font-black text-gray-700 bg-gradient-to-r from-white to-purple-50">
-                            Royal Stats
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {habits.slice(0, showHiddenRows ? habits.length : 7).map((habit) => {
-                          const stats = getHabitStats(habit.id, currentMonth);
-                          const emoji = getProgressEmoji(stats.progress);
-                          
-                          return (
-                            <tr key={habit.id} className="border-b border-purple-50 hover:bg-purple-50/50 transition-colors">
-                              <td className="p-6 sticky left-0 bg-gradient-to-r from-white to-purple-50">
-                                <div className="flex items-center gap-4">
-                                  <div className="relative">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-md opacity-50"></div>
-                                    <span className="relative text-3xl">{habit.emoji}</span>
-                                  </div>
-                                  <div>
-                                    <div className="font-bold text-gray-800">{habit.name}</div>
-                                    <div className="text-sm font-medium text-gray-600">
-                                      Target: {habit.target}/month
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              
-                              {Array.from({ length: getDaysInMonth(currentMonth, year) }, (_, i) => i + 1).map(day => {
-                                const key = `${habit.id}-${year}-${currentMonth}-${day}`;
-                                const isCompleted = completions[key];
-                                const isToday = day === currentDay && year === currentYear && currentMonth === today.getMonth();
-                                const isFuture = new Date(year, currentMonth, day) > today;
-                                
-                                return (
-                                  <td key={day} className="p-2">
-                                    <button
-                                      onClick={() => !isFuture && toggleCompletion(habit.id, day, currentMonth)}
-                                      disabled={isFuture}
-                                      className={`
-                                        w-12 h-12 mx-auto rounded-xl flex items-center justify-center transition-all duration-200
-                                        ${isCompleted
-                                          ? 'bg-gradient-to-br from-purple-400 to-indigo-400 text-white shadow-lg hover:shadow-xl'
-                                          : isToday
-                                          ? 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 shadow'
-                                          : 'bg-gradient-to-br from-purple-50 to-indigo-50 text-gray-500 hover:shadow-lg'
-                                        }
-                                        ${isFuture ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'}
-                                      `}
-                                    >
-                                      {isCompleted ? (
-                                        <CheckCircle2 size={22} strokeWidth={2.5} />
-                                      ) : isFuture ? (
-                                        <span className="text-sm font-bold">-</span>
-                                      ) : (
-                                        <span className="text-xl font-bold">+</span>
-                                      )}
-                                    </button>
-                                  </td>
-                                );
-                              })}
-                              
-                              <td className="p-6 bg-gradient-to-r from-white to-purple-50">
-                                <div className="flex flex-col gap-4">
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-medium text-gray-600">Total:</span>
-                                    <span className="font-black text-2xl text-gray-800">{stats.total}</span>
-                                  </div>
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-medium text-gray-600">Streak:</span>
-                                    <div className="flex items-center gap-2">
-                                      <Flame size={18} className={stats.currentStreak > 0 ? 'text-violet-400' : 'text-purple-400'} />
-                                      <span className="font-bold text-lg text-gray-800">{stats.currentStreak}</span>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-medium text-gray-600">Progress:</span>
-                                    <div className="flex items-center gap-3">
-                                      <span className="text-3xl">{emoji}</span>
-                                      <span className="font-black text-2xl text-gray-800">{Math.round(stats.progress)}%</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                     
-                    {habits.length > 7 && !showHiddenRows && (
-                      <div className="p-6 text-center bg-gradient-to-r from-purple-50 to-indigo-50">
+                    {habits.length > (screenSize === 'mobile' ? 5 : 7) && !showHiddenRows && (
+                      <div className="p-4 sm:p-6 text-center bg-gradient-to-r from-purple-50 to-indigo-50">
                         <button
                           onClick={() => setShowHiddenRows(true)}
-                          className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                          className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-lg sm:rounded-xl hover:shadow-lg transition-all text-sm sm:text-base"
                         >
-                          <ChevronDown size={20} />
-                          Show {habits.length - 7} more royal habits
+                          <ChevronDown size={18} />
+                          Show {habits.length - (screenSize === 'mobile' ? 5 : 7)} more habits
                         </button>
                       </div>
                     )}
                   </div>
+                  
+                  {/* Mobile Tracker Alternative */}
+                  {screenSize === 'mobile' && (
+                    <div className="p-4">
+                      <div className="text-center mb-4">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-100 rounded-lg">
+                          <TargetIcon className="text-purple-600 w-4 h-4" />
+                          <span className="text-sm font-medium text-purple-700">Scroll horizontally to see all days</span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        {habits.map(habit => {
+                          const stats = getHabitStats(habit.id, currentMonth);
+                          const emoji = getProgressEmoji(stats.progress);
+                          
+                          return (
+                            <div key={habit.id} className="bg-white rounded-xl p-3 border border-purple-100 shadow-sm">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-2xl">{habit.emoji}</span>
+                                  <span className="font-bold text-gray-800 text-sm truncate">{habit.name}</span>
+                                </div>
+                                <span className="text-xl">{emoji}</span>
+                              </div>
+                              <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full bg-gradient-to-r ${habit.color}`}
+                                  style={{ width: `${Math.min(stats.progress, 100)}%` }}
+                                ></div>
+                              </div>
+                              <div className="flex justify-between mt-2 text-xs">
+                                <span className="text-gray-600">{stats.total}/{habit.target}</span>
+                                <span className="font-bold text-purple-600">{Math.round(stats.progress)}%</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Stats Summary */}
-                <div className="glass-card rounded-3xl p-8">
-                  <h2 className="text-2xl font-black text-gray-800 mb-6">Royal Monthly Summary</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Crown className="text-yellow-400" size={24} />
-                        <h3 className="font-bold text-gray-700">Royal Top Performers</h3>
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-gray-800 mb-4 sm:mb-6">Monthly Summary</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Crown className="text-yellow-400 w-5 h-5 sm:w-6 sm:h-6" />
+                        <h3 className="font-bold text-gray-700 text-sm sm:text-base">Top Performers</h3>
                       </div>
                       {habits
                         .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                         .sort((a, b) => b.stats.progress - a.stats.progress)
                         .slice(0, 3)
                         .map((habit, index) => (
-                          <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
-                            <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg font-bold text-white">
+                          <div key={habit.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
+                            <div className="flex items-center gap-3">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg font-bold text-white text-xs sm:text-sm">
                                 {index + 1}
                               </div>
-                              <div className="flex items-center gap-3">
-                                <span className="text-2xl">{habit.emoji}</span>
-                                <span className="font-medium">{habit.name}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl">{habit.emoji}</span>
+                                <span className="font-medium text-sm sm:text-base truncate">{habit.name}</span>
                               </div>
                             </div>
-                            <span className="font-black text-2xl text-purple-600">
+                            <span className="font-black text-purple-600 text-base sm:text-lg lg:text-xl">
                               {Math.round(habit.stats.progress)}%
                             </span>
                           </div>
                         ))}
                     </div>
                     
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <TargetIcon className="text-violet-400" size={24} />
-                        <h3 className="font-bold text-gray-700">Need Royal Attention</h3>
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <TargetIcon className="text-violet-400 w-5 h-5 sm:w-6 sm:h-6" />
+                        <h3 className="font-bold text-gray-700 text-sm sm:text-base">Need Attention</h3>
                       </div>
                       {habits
                         .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                         .sort((a, b) => a.stats.progress - b.stats.progress)
                         .slice(0, 3)
                         .map((habit, index) => (
-                          <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl border border-violet-200">
-                            <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-violet-400 to-purple-400 rounded-lg font-bold text-white">
+                          <div key={habit.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl border border-violet-200">
+                            <div className="flex items-center gap-3">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-gradient-to-r from-violet-400 to-purple-400 rounded-lg font-bold text-white text-xs sm:text-sm">
                                 {index + 1}
                               </div>
-                              <div className="flex items-center gap-3">
-                                <span className="text-2xl">{habit.emoji}</span>
-                                <span className="font-medium">{habit.name}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl">{habit.emoji}</span>
+                                <span className="font-medium text-sm sm:text-base truncate">{habit.name}</span>
                               </div>
                             </div>
-                            <span className="font-black text-2xl text-violet-600">
+                            <span className="font-black text-violet-600 text-base sm:text-lg lg:text-xl">
                               {Math.round(habit.stats.progress)}%
                             </span>
                           </div>
                         ))}
                     </div>
                     
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Flame className="text-fuchsia-400" size={24} />
-                        <h3 className="font-bold text-gray-700">Royal Streaks</h3>
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Flame className="text-fuchsia-400 w-5 h-5 sm:w-6 sm:h-6" />
+                        <h3 className="font-bold text-gray-700 text-sm sm:text-base">Current Streaks</h3>
                       </div>
                       {habits
                         .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                         .sort((a, b) => b.stats.currentStreak - a.stats.currentStreak)
                         .slice(0, 3)
                         .map((habit, index) => (
-                          <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-fuchsia-50 to-purple-50 rounded-xl border border-fuchsia-200">
-                            <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-lg font-bold text-white">
+                          <div key={habit.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-fuchsia-50 to-purple-50 rounded-xl border border-fuchsia-200">
+                            <div className="flex items-center gap-3">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-lg font-bold text-white text-xs sm:text-sm">
                                 {index + 1}
                               </div>
-                              <div className="flex items-center gap-3">
-                                <Flame size={20} className={habit.stats.currentStreak > 0 ? 'text-fuchsia-400' : 'text-purple-400'} />
-                                <span className="font-medium">{habit.name}</span>
+                              <div className="flex items-center gap-2">
+                                <Flame size={16} className={habit.stats.currentStreak > 0 ? 'text-fuchsia-400' : 'text-purple-400'} />
+                                <span className="font-medium text-sm sm:text-base truncate">{habit.name}</span>
                               </div>
                             </div>
-                            <span className="font-black text-2xl text-fuchsia-600">
+                            <span className="font-black text-fuchsia-600 text-base sm:text-lg lg:text-xl">
                               {habit.stats.currentStreak} days
                             </span>
                           </div>
@@ -1210,51 +1393,51 @@ const App = () => {
 
             {/* Setup Tab */}
             {activeTab === 'setup' && (
-              <div className="space-y-6">
-                <div className="glass-card rounded-3xl p-8">
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center gap-4">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
-                        <div className="relative p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                          <Settings className="text-white" size={28} />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur opacity-50"></div>
+                        <div className="relative p-2 sm:p-3 lg:p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                          <Settings className="text-white w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
                         </div>
                       </div>
                       <div>
-                        <h2 className="text-3xl font-black text-gray-800">Royal Habit Configuration</h2>
-                        <p className="text-violet-600 font-medium mt-2">
-                          Customize your royal habits, targets, and progress emojis
+                        <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-gray-800">Habit Configuration</h2>
+                        <p className="text-violet-600 font-medium text-sm sm:text-base mt-1">
+                          Customize your habits and progress settings
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-black gradient-text">{habits.length}</div>
-                      <div className="text-sm font-bold text-gray-600">Royal Habits</div>
+                      <div className="text-2xl sm:text-3xl lg:text-4xl font-black gradient-text">{habits.length}</div>
+                      <div className="text-xs sm:text-sm font-bold text-gray-600">Total Habits</div>
                     </div>
                   </div>
                   
                   {/* Add New Habit */}
-                  <div className="mb-8 p-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border-2 border-dashed border-purple-300">
-                    <h3 className="font-black text-gray-800 text-xl mb-6 flex items-center gap-3">
-                      <Plus className="text-purple-500" size={24} />
-                      Add New Royal Habit
+                  <div className="mb-6 sm:mb-8 p-4 sm:p-6 lg:p-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl sm:rounded-2xl border-2 border-dashed border-purple-300">
+                    <h3 className="font-black text-gray-800 text-base sm:text-lg lg:text-xl mb-4 flex items-center gap-2">
+                      <Plus className="text-purple-500 w-5 h-5" />
+                      Add New Habit
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div className="md:col-span-2">
-                        <label className="block text-sm font-bold text-gray-700 mb-2">
-                          Royal Habit Name
+                        <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
+                          Habit Name
                         </label>
                         <input
                           type="text"
                           value={newHabit.name}
                           onChange={(e) => setNewHabit({...newHabit, name: e.target.value})}
                           placeholder="e.g., Drink 2L water daily"
-                          className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                          className="w-full px-3 py-2 sm:px-4 sm:py-3 lg:px-5 lg:py-4 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm sm:text-base"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">
-                          Royal Emoji
+                        <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
+                          Emoji
                         </label>
                         <div className="relative">
                           <input
@@ -1263,13 +1446,13 @@ const App = () => {
                             onChange={(e) => setNewHabit({...newHabit, emoji: e.target.value})}
                             placeholder="✨"
                             maxLength="2"
-                            className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white text-center text-3xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                            className="w-full px-3 py-2 sm:px-4 sm:py-3 lg:px-5 lg:py-4 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white text-center text-2xl sm:text-3xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                           />
                         </div>
                       </div>
-                      <div className="flex items-end gap-3">
+                      <div className="flex items-end gap-2">
                         <div className="flex-1">
-                          <label className="block text-sm font-bold text-gray-700 mb-2">
+                          <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
                             Monthly Target
                           </label>
                           <input
@@ -1278,52 +1461,52 @@ const App = () => {
                             max="31"
                             value={newHabit.target}
                             onChange={(e) => setNewHabit({...newHabit, target: parseInt(e.target.value) || 20})}
-                            className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                            className="w-full px-3 py-2 sm:px-4 sm:py-3 lg:px-5 lg:py-4 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm sm:text-base"
                           />
                         </div>
                         <button
                           onClick={addHabit}
-                          className="px-6 py-4 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                          className="px-3 py-2 sm:px-4 sm:py-3 lg:px-6 lg:py-4 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-lg sm:rounded-xl hover:shadow-lg transition-all"
                         >
-                          <Plus size={24} />
+                          <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                         </button>
                       </div>
                     </div>
                   </div>
                   
                   {/* Habit List */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {habits.map((habit) => {
                       const stats = getHabitStats(habit.id, currentMonth);
                       
                       return (
-                        <div key={habit.id} className="flex items-center gap-4 p-6 border-2 border-purple-100 rounded-2xl hover:shadow-lg transition-all">
+                        <div key={habit.id} className="flex items-center gap-3 p-3 sm:p-4 lg:p-6 border-2 border-purple-100 rounded-xl sm:rounded-2xl hover:shadow-lg transition-all">
                           <button
                             onClick={() => deleteHabit(habit.id)}
-                            className="p-3 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors"
+                            className="p-2 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-500 hover:text-purple-600 rounded-lg transition-colors flex-shrink-0"
                           >
-                            <Trash2 size={20} />
+                            <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                           </button>
                           
-                          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="flex items-center gap-4">
+                          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                            <div className="flex items-center gap-3">
                               <input
                                 type="text"
                                 value={habit.emoji}
                                 onChange={(e) => updateHabit(habit.id, 'emoji', e.target.value)}
                                 maxLength="2"
-                                className="w-16 h-16 text-4xl text-center border-2 border-purple-300 rounded-xl bg-white"
+                                className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-2xl sm:text-3xl text-center border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white flex-shrink-0"
                               />
                               <input
                                 type="text"
                                 value={habit.name}
                                 onChange={(e) => updateHabit(habit.id, 'name', e.target.value)}
-                                className="flex-1 px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
+                                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white text-sm sm:text-base"
                               />
                             </div>
                             
                             <div>
-                              <label className="block text-sm font-bold text-gray-600 mb-2">
+                              <label className="block text-xs sm:text-sm font-bold text-gray-600 mb-1 sm:mb-2">
                                 Monthly Target
                               </label>
                               <input
@@ -1332,24 +1515,24 @@ const App = () => {
                                 max="31"
                                 value={habit.target}
                                 onChange={(e) => updateHabit(habit.id, 'target', e.target.value)}
-                                className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
+                                className="w-full px-3 py-2 sm:px-4 sm:py-3 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white text-sm sm:text-base"
                               />
                             </div>
                             
                             <div>
-                              <label className="block text-sm font-bold text-gray-600 mb-2">
+                              <label className="block text-xs sm:text-sm font-bold text-gray-600 mb-1 sm:mb-2">
                                 Current Progress
                               </label>
-                              <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
                                 <div className="flex-1">
-                                  <div className="h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
+                                  <div className="h-2 sm:h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                                     <div 
                                       className={`h-full rounded-full bg-gradient-to-r ${habit.color}`}
                                       style={{ width: `${Math.min(stats.progress, 100)}%` }}
                                     ></div>
                                   </div>
                                 </div>
-                                <span className="font-black text-2xl text-gray-800">{Math.round(stats.progress)}%</span>
+                                <span className="font-black text-gray-800 text-base sm:text-lg lg:text-xl">{Math.round(stats.progress)}%</span>
                               </div>
                             </div>
                           </div>
@@ -1360,26 +1543,26 @@ const App = () => {
                 </div>
 
                 {/* Emoji Levels Configuration */}
-                <div className="glass-card rounded-3xl p-8">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                      <Gem className="text-white" size={24} />
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 sm:p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                      <Gem className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-gray-800">Royal Progress Emoji Levels</h2>
-                      <p className="text-violet-600 font-medium mt-1">
-                        Set different royal emojis that appear as you reach certain completion percentages
+                      <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-gray-800">Progress Emoji Levels</h2>
+                      <p className="text-violet-600 font-medium text-sm sm:text-base mt-1">
+                        Set emojis for different completion percentages
                       </p>
                     </div>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {emojiLevels.map((level, index) => (
-                      <div key={index} className="flex items-center gap-6 p-6 border-2 border-purple-100 rounded-2xl">
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 sm:p-4 lg:p-6 border-2 border-purple-100 rounded-xl sm:rounded-2xl">
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                           <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">
-                              Completion Threshold (%)
+                            <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
+                              Threshold (%)
                             </label>
                             <input
                               type="number"
@@ -1391,12 +1574,12 @@ const App = () => {
                                 newLevels[index].threshold = parseInt(e.target.value) || 0;
                                 setEmojiLevels(newLevels.sort((a, b) => a.threshold - b.threshold));
                               }}
-                              className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
+                              className="w-full px-3 py-2 sm:px-4 sm:py-3 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white text-sm sm:text-base"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">
-                              Royal Emoji
+                            <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
+                              Display Emoji
                             </label>
                             <input
                               type="text"
@@ -1407,13 +1590,13 @@ const App = () => {
                                 setEmojiLevels([...newLevels]);
                               }}
                               maxLength="2"
-                              className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white text-3xl text-center"
+                              className="w-full px-3 py-2 sm:px-4 sm:py-3 border-2 border-purple-300 rounded-lg sm:rounded-xl bg-white text-2xl sm:text-3xl text-center"
                             />
                           </div>
                         </div>
-                        <div className="text-center">
-                          <div className="text-5xl mb-2">{level.emoji}</div>
-                          <div className="text-sm font-bold text-gray-600">
+                        <div className="text-center w-full sm:w-auto">
+                          <div className="text-3xl sm:text-4xl lg:text-5xl mb-1 sm:mb-2">{level.emoji}</div>
+                          <div className="text-xs sm:text-sm font-bold text-gray-600">
                             ≥{level.threshold}%
                           </div>
                         </div>
@@ -1423,9 +1606,9 @@ const App = () => {
                   
                   <button
                     onClick={() => setEmojiLevels([...emojiLevels, { threshold: 0, emoji: '✨', color: 'from-gray-400 to-gray-300' }])}
-                    className="mt-6 px-6 py-4 border-2 border-dashed border-purple-300 rounded-xl text-purple-600 font-bold hover:border-purple-400 transition-colors w-full"
+                    className="mt-4 sm:mt-6 px-4 py-3 sm:px-6 sm:py-4 border-2 border-dashed border-purple-300 rounded-lg sm:rounded-xl text-purple-600 font-bold hover:border-purple-400 transition-colors w-full text-sm sm:text-base"
                   >
-                    + Add Royal Emoji Level
+                    + Add New Emoji Level
                   </button>
                 </div>
               </div>
@@ -1434,40 +1617,48 @@ const App = () => {
         )}
 
         {/* Footer */}
-        <footer className="glass-card rounded-3xl p-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
+        <footer className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+            <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
-                <div className="relative p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
-                  <Crown className="text-white" size={24} />
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur opacity-50"></div>
+                <div className="relative p-2 sm:p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                  <Crown className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
               </div>
               <div>
-                <div className="font-black text-gray-800">Built for Royal Discipline & Growth</div>
-                <div className="text-violet-600 font-medium">
-                  {user ? `Synced to cloud as ${user.email}` : 'Track your royal journey to better habits'}
+                <div className="font-black text-gray-800 text-sm sm:text-base">Built for Royal Discipline & Growth</div>
+                <div className="text-violet-600 font-medium text-xs sm:text-sm">
+                  {user ? `Synced as ${user.email?.split('@')[0]}` : 'Track your royal journey'}
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
               <div className="text-center">
-                <div className="flex items-center gap-2 text-violet-500 font-black text-lg">
-                  <Flame size={18} fill="currentColor" />
+                <div className="flex items-center gap-1 text-violet-500 font-black text-sm sm:text-base lg:text-lg">
+                  <Flame className="w-4 h-4" fill="currentColor" />
                   {getCurrentStreak()} DAY STREAK
                 </div>
-                <div className="text-gray-600 font-bold">
+                <div className="text-gray-600 font-bold text-xs sm:text-sm">
                   {getTotalCompletedToday()}/{habits.length} DONE TODAY
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <Clock className="text-purple-500" size={20} />
-                <div className="font-mono font-black text-gray-800 text-xl">
+              <div className="flex items-center gap-2">
+                <Clock className="text-purple-500 w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="font-mono font-black text-gray-800 text-base sm:text-lg lg:text-xl">
                   {currentTime}
                 </div>
               </div>
+            </div>
+          </div>
+          
+          {/* Mobile Device Info */}
+          <div className="mt-4 pt-4 border-t border-purple-200 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 rounded-lg">
+              {getScreenSizeIcon()}
+              <span className="text-xs text-gray-600">Optimized for {screenSize}</span>
             </div>
           </div>
         </footer>
