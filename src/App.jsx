@@ -14,25 +14,25 @@ const App = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [weekStartsOn, setWeekStartsOn] = useState('Monday');
   const [habits, setHabits] = useState([
-    { id: 1, name: 'Wake up at 4am', emoji: '⏰', target: 28, color: 'from-amber-500 to-orange-600', streak: 7 },
-    { id: 2, name: 'Meditation (30m)', emoji: '🧘', target: 25, color: 'from-purple-500 to-pink-600', streak: 5 },
-    { id: 3, name: 'Running 3km (7am)', emoji: '🏃', target: 20, color: 'from-cyan-500 to-blue-600', streak: 12 },
-    { id: 4, name: 'Workout', emoji: '💪', target: 22, color: 'from-rose-500 to-pink-600', streak: 8 },
-    { id: 5, name: 'Read Paper', emoji: '📰', target: 25, color: 'from-sky-500 to-cyan-600', streak: 14 },
-    { id: 6, name: 'Learn Java (New)', emoji: '☕', target: 22, color: 'from-orange-500 to-red-600', streak: 3 },
-    { id: 7, name: 'Revise Java', emoji: '📖', target: 22, color: 'from-yellow-500 to-amber-600', streak: 9 },
-    { id: 8, name: 'Instagram Limit (1.5h)', emoji: '📱', target: 30, color: 'from-violet-500 to-purple-600', streak: 21 },
-    { id: 9, name: 'Work on App', emoji: '💻', target: 20, color: 'from-teal-500 to-green-600', streak: 6 },
-    { id: 10, name: 'Talk with Family', emoji: '🏠', target: 30, color: 'from-green-500 to-emerald-600', streak: 30 },
-    { id: 11, name: 'Sleep at 10pm', emoji: '🌙', target: 28, color: 'from-violet-500 to-purple-600', streak: 4 },
+    { id: 1, name: 'Wake up at 4am', emoji: '⏰', target: 28, color: 'from-purple-500 to-indigo-600', streak: 7 },
+    { id: 2, name: 'Meditation (30m)', emoji: '🧘', target: 25, color: 'from-violet-500 to-purple-600', streak: 5 },
+    { id: 3, name: 'Running 3km (7am)', emoji: '🏃', target: 20, color: 'from-blue-500 to-indigo-600', streak: 12 },
+    { id: 4, name: 'Workout', emoji: '💪', target: 22, color: 'from-purple-500 to-pink-600', streak: 8 },
+    { id: 5, name: 'Read Paper', emoji: '📰', target: 25, color: 'from-indigo-500 to-blue-600', streak: 14 },
+    { id: 6, name: 'Learn Java (New)', emoji: '☕', target: 22, color: 'from-purple-600 to-violet-600', streak: 3 },
+    { id: 7, name: 'Revise Java', emoji: '📖', target: 22, color: 'from-violet-500 to-purple-500', streak: 9 },
+    { id: 8, name: 'Instagram Limit (1.5h)', emoji: '📱', target: 30, color: 'from-purple-700 to-indigo-700', streak: 21 },
+    { id: 9, name: 'Work on App', emoji: '💻', target: 20, color: 'from-indigo-500 to-blue-500', streak: 6 },
+    { id: 10, name: 'Talk with Family', emoji: '🏠', target: 30, color: 'from-purple-600 to-violet-600', streak: 30 },
+    { id: 11, name: 'Sleep at 10pm', emoji: '🌙', target: 28, color: 'from-indigo-600 to-purple-700', streak: 4 },
   ]);
   const [emojiLevels, setEmojiLevels] = useState([
     { threshold: 0, emoji: '🌱', color: 'from-gray-400 to-gray-300' },
-    { threshold: 25, emoji: '🌿', color: 'from-green-400 to-emerald-400' },
-    { threshold: 50, emoji: '🌳', color: 'from-emerald-400 to-teal-400' },
-    { threshold: 75, emoji: '🌟', color: 'from-yellow-400 to-amber-400' },
-    { threshold: 90, emoji: '🏆', color: 'from-orange-400 to-red-400' },
-    { threshold: 100, emoji: '👑', color: 'from-purple-400 to-pink-400' },
+    { threshold: 25, emoji: '🌿', color: 'from-purple-400 to-indigo-400' },
+    { threshold: 50, emoji: '🌳', color: 'from-indigo-400 to-purple-500' },
+    { threshold: 75, emoji: '🌟', color: 'from-violet-400 to-purple-400' },
+    { threshold: 90, emoji: '🏆', color: 'from-purple-500 to-indigo-500' },
+    { threshold: 100, emoji: '👑', color: 'from-purple-600 to-violet-600' },
   ]);
   const [completions, setCompletions] = useState({});
   const [newHabit, setNewHabit] = useState({ name: '', emoji: '✨', target: 20 });
@@ -57,7 +57,7 @@ const App = () => {
       day: 'numeric'
     }));
     
-    setQuote("Every day is a new chance to level up! 🚀");
+    setQuote("Royal discipline leads to majestic results! 👑");
     
     // Load saved data
     const savedHabits = localStorage.getItem('habitTracker_habits');
@@ -174,16 +174,16 @@ const App = () => {
   // Get random gradient
   const getRandomGradient = () => {
     const gradients = [
-      'from-cyan-500 to-blue-600',
-      'from-purple-500 to-pink-600',
-      'from-green-500 to-emerald-600',
-      'from-orange-500 to-red-600',
-      'from-yellow-500 to-amber-600',
-      'from-rose-500 to-pink-600',
-      'from-sky-500 to-cyan-600',
+      'from-purple-500 to-indigo-600',
       'from-violet-500 to-purple-600',
-      'from-teal-500 to-green-600',
-      'from-amber-500 to-orange-600'
+      'from-indigo-500 to-blue-600',
+      'from-purple-600 to-violet-600',
+      'from-indigo-400 to-purple-500',
+      'from-purple-400 to-indigo-500',
+      'from-violet-400 to-purple-400',
+      'from-purple-700 to-indigo-700',
+      'from-indigo-600 to-purple-700',
+      'from-purple-500 to-indigo-500'
     ];
     return gradients[Math.floor(Math.random() * gradients.length)];
   };
@@ -314,22 +314,18 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-gray-100 to-zinc-100 dark:from-slate-950 dark:to-slate-900 text-slate-900 dark:text-slate-100 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 text-gray-900 font-sans">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .glass-card {
-          background: rgba(255, 255, 255, 0.85);
+          background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(12px);
           border: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 8px 32px rgba(255, 107, 107, 0.1);
-        }
-        .dark .glass-card {
-          background: rgba(30, 41, 59, 0.85);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(147, 51, 234, 0.1);
         }
         .gradient-text {
-          background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FFD166);
+          background: linear-gradient(135deg, #9333EA, #7C3AED, #4F46E5);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-size: 200% 200%;
@@ -365,21 +361,21 @@ const App = () => {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full blur-md opacity-60"></div>
-                  <div className="relative bg-gradient-to-r from-amber-400 to-orange-400 p-3 rounded-2xl">
-                    <Rocket className="text-white" size={24} />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full blur-md opacity-60"></div>
+                  <div className="relative bg-gradient-to-r from-purple-500 to-indigo-500 p-3 rounded-2xl">
+                    <Crown className="text-white" size={24} />
                   </div>
                 </div>
-                <h1 className="text-4xl font-black gradient-text">HabitHero Pro</h1>
+                <h1 className="text-4xl font-black gradient-text">Royal Habit Tracker</h1>
               </div>
               <div className="flex items-center gap-4 mt-2">
-                <p className="text-slate-700 dark:text-slate-300 font-medium">{currentDate}</p>
+                <p className="text-gray-800 font-medium">{currentDate}</p>
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${
                     syncStatus === 'saving' ? 'bg-yellow-400 animate-pulse ring-2 ring-yellow-200' :
-                    syncStatus === 'saved' ? 'bg-green-400 ring-2 ring-green-200' : 'bg-blue-400 ring-2 ring-blue-200'
+                    syncStatus === 'saved' ? 'bg-green-400 ring-2 ring-green-200' : 'bg-purple-400 ring-2 ring-purple-200'
                   }`}></div>
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <span className="text-sm font-medium text-gray-600">
                     {syncStatus === 'saving' ? 'Saving...' : 
                      syncStatus === 'saved' ? 'All changes saved' : 'Ready'}
                   </span>
@@ -388,15 +384,15 @@ const App = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex bg-slate-200 dark:bg-slate-800 rounded-2xl p-1 shadow-inner">
+              <div className="flex bg-purple-100 rounded-2xl p-1 shadow-inner">
                 {['dashboard', 'tracker', 'setup'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${
                       activeTab === tab
-                        ? 'bg-slate-900 text-white shadow-lg'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                        : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -411,17 +407,17 @@ const App = () => {
               
               <div className="text-right">
                 <div className="flex items-center justify-end gap-2">
-                  <Clock className="text-amber-500" size={18} />
-                  <div className="text-xl font-bold text-slate-900 dark:text-slate-100">{currentTime}</div>
+                  <Clock className="text-purple-500" size={18} />
+                  <div className="text-xl font-bold text-gray-900">{currentTime}</div>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <div className="h-2 flex-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 flex-1 bg-purple-200 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"
+                      className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
                       style={{ width: `${getTodayPercentage()}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                  <span className="text-sm font-bold text-gray-800">
                     {getTotalCompletedToday()}/{habits.length}
                   </span>
                 </div>
@@ -429,17 +425,17 @@ const App = () => {
             </div>
           </div>
           
-          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+          <div className="mt-8 pt-6 border-t border-purple-200">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg">
+                  <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
                     <Sparkle className="text-white" size={20} />
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{quote}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{quote}</h2>
                 </div>
-                <p className="text-slate-600 dark:text-slate-400 font-medium mt-2">
-                  Your daily progress creates extraordinary results
+                <p className="text-gray-700 font-medium mt-2">
+                  Royal discipline creates extraordinary habits
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -447,7 +443,7 @@ const App = () => {
                   <select
                     value={year}
                     onChange={(e) => setYear(parseInt(e.target.value))}
-                    className="appearance-none px-4 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
                   >
                     {[2024, 2025, 2026, 2027, 2028].map(y => (
                       <option key={y} value={y} className="bg-white text-gray-800">{y}</option>
@@ -459,7 +455,7 @@ const App = () => {
                   <select
                     value={weekStartsOn}
                     onChange={(e) => setWeekStartsOn(e.target.value)}
-                    className="appearance-none px-4 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    className="appearance-none px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
                   >
                     <option value="Monday" className="bg-white text-gray-800">Week starts Monday</option>
                     <option value="Sunday" className="bg-white text-gray-800">Week starts Sunday</option>
@@ -476,80 +472,80 @@ const App = () => {
           <div className="space-y-6">
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-amber-400">
+              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-purple-400">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full blur-lg opacity-50 pulse-ring"></div>
-                    <div className="relative p-3 bg-gradient-to-r from-amber-400 to-orange-400 rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-lg opacity-50 pulse-ring"></div>
+                    <div className="relative p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
                       <Target className="text-white" size={24} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">Overall Progress</div>
-                    <div className="text-3xl font-black text-slate-900 dark:text-slate-100">{getOverallProgress()}%</div>
+                    <div className="text-sm font-semibold text-gray-600">Overall Progress</div>
+                    <div className="text-3xl font-black text-gray-900">{getOverallProgress()}%</div>
                   </div>
                 </div>
-                <div className="h-3 bg-gradient-to-r from-amber-100 to-orange-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full"
                     style={{ width: `${getOverallProgress()}%` }}
                   ></div>
                 </div>
               </div>
               
-              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-red-400">
+              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-violet-400">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-rose-400 rounded-full blur-lg opacity-50"></div>
-                    <div className="relative p-3 bg-gradient-to-r from-red-400 to-rose-400 rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-full blur-lg opacity-50"></div>
+                    <div className="relative p-3 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
                       <Flame className="text-white" size={24} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">Current Streak</div>
-                    <div className="text-3xl font-black text-slate-900 dark:text-slate-100 flex items-center gap-3">
+                    <div className="text-sm font-semibold text-gray-600">Current Streak</div>
+                    <div className="text-3xl font-black text-gray-900 flex items-center gap-3">
                       {getCurrentStreak()}
-                      {getCurrentStreak() > 0 && <Flame size={24} className="text-red-400" fill="currentColor" />}
+                      {getCurrentStreak() > 0 && <Flame size={24} className="text-violet-400" fill="currentColor" />}
                     </div>
                   </div>
                 </div>
-                <div className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                  {getCurrentStreak() > 0 ? '🔥 Keep the fire burning!' : 'Start your streak today!'}
+                <div className="text-sm font-medium text-gray-700">
+                  {getCurrentStreak() > 0 ? '🔥 Keep the royal flame burning!' : 'Start your royal streak today!'}
                 </div>
               </div>
               
-              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-emerald-400">
+              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-indigo-400">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-green-400 rounded-full blur-lg opacity-50"></div>
-                    <div className="relative p-3 bg-gradient-to-r from-emerald-400 to-green-400 rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-full blur-lg opacity-50"></div>
+                    <div className="relative p-3 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-xl">
                       <Trophy className="text-white" size={24} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">Best Streak</div>
-                    <div className="text-3xl font-black text-slate-900 dark:text-slate-100">{getBestStreak()}</div>
+                    <div className="text-sm font-semibold text-gray-600">Best Streak</div>
+                    <div className="text-3xl font-black text-gray-900">{getBestStreak()}</div>
                   </div>
                 </div>
-                <div className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                  {getBestStreak() > 0 ? '🎯 Your personal record!' : 'Set your first record!'}
+                <div className="text-sm font-medium text-gray-600">
+                  {getBestStreak() > 0 ? '👑 Your royal record!' : 'Set your first royal record!'}
                 </div>
               </div>
               
-              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-purple-400">
+              <div className="glass-card rounded-3xl p-6 border-l-4 border-l-fuchsia-400">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full blur-lg opacity-50"></div>
-                    <div className="relative p-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-full blur-lg opacity-50"></div>
+                    <div className="relative p-3 bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-xl">
                       <TrendingUp className="text-white" size={24} />
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-500 dark:text-slate-400">Today's Progress</div>
-                    <div className="text-3xl font-black text-slate-900 dark:text-slate-100">{getTodayPercentage()}%</div>
+                    <div className="text-sm font-semibold text-gray-600">Today's Progress</div>
+                    <div className="text-3xl font-black text-gray-900">{getTodayPercentage()}%</div>
                   </div>
                 </div>
-                <div className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                <div className="text-sm font-medium text-gray-700">
                   {getTotalCompletedToday()} of {habits.length} habits completed
                 </div>
               </div>
@@ -559,19 +555,19 @@ const App = () => {
             <div className="glass-card rounded-3xl p-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-xl">
+                  <div className="p-3 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl">
                     <BarChart3 className="text-white" size={24} />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100">Performance Overview</h2>
-                    <p className="text-slate-600 dark:text-slate-400 font-medium">
+                    <h2 className="text-2xl font-black text-gray-900">Royal Performance Overview</h2>
+                    <p className="text-gray-700 font-medium">
                       {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} Progress
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Star className="text-yellow-400 fill-current" size={20} />
-                  <span className="font-bold text-slate-700 dark:text-slate-300">Active Habits: {habits.length}</span>
+                  <Crown className="text-yellow-400 fill-current" size={20} />
+                  <span className="font-bold text-gray-700">Royal Habits: {habits.length}</span>
                 </div>
               </div>
               
@@ -588,13 +584,13 @@ const App = () => {
                           <div className="flex items-center gap-3">
                             <span className="text-3xl">{habit.emoji}</span>
                             <div>
-                              <div className="font-bold text-slate-900 dark:text-slate-100">{habit.name}</div>
+                              <div className="font-bold text-gray-900">{habit.name}</div>
                               <div className="flex items-center gap-3 text-sm">
-                                <span className="font-medium text-slate-500 dark:text-slate-400">
+                                <span className="font-medium text-gray-600">
                                   Target: {habit.target}/month
                                 </span>
                                 {stats.currentStreak > 0 && (
-                                  <span className="flex items-center gap-1 font-medium text-red-500">
+                                  <span className="flex items-center gap-1 font-medium text-violet-600">
                                     <Flame size={14} /> {stats.currentStreak}d streak
                                   </span>
                                 )}
@@ -604,8 +600,8 @@ const App = () => {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{Math.round(progress)}%</div>
-                            <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                            <div className="text-2xl font-black text-gray-900">{Math.round(progress)}%</div>
+                            <div className="text-sm font-medium text-gray-600">
                               {stats.total}/{habit.target} days
                             </div>
                           </div>
@@ -613,15 +609,15 @@ const App = () => {
                         </div>
                       </div>
                       <div className="relative">
-                        <div className="h-4 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-gray-700 dark:to-gray-600 rounded-full overflow-hidden">
+                        <div className="h-4 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                           <div 
                             className={`h-full rounded-full bg-gradient-to-r ${habit.color}`}
                             style={{ width: `${progress}%` }}
                           ></div>
                         </div>
                         <div className="flex justify-between mt-2 text-sm font-medium">
-                          <span className="text-slate-600 dark:text-slate-300">0%</span>
-                          <span className="text-slate-600 dark:text-slate-300">100%</span>
+                          <span className="text-gray-600">0%</span>
+                          <span className="text-gray-600">100%</span>
                         </div>
                       </div>
                     </div>
@@ -632,46 +628,46 @@ const App = () => {
 
             {/* Quick Actions */}
             <div className="glass-card rounded-3xl p-8">
-              <h2 className="text-2xl font-black text-gray-800 dark:text-gray-100 mb-6">Quick Actions</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">Royal Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="group p-6 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl border border-blue-200 dark:border-blue-800 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                <div className="group p-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border border-purple-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-6">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
-                      <div className="relative p-4 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-xl">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
+                      <div className="relative p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
                         <Download className="text-white" size={28} />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-800 dark:text-gray-100 text-lg mb-1">Export Your Data</div>
-                      <div className="text-gray-600 dark:text-gray-300">
+                      <div className="font-bold text-gray-900 text-lg mb-1">Export Royal Data</div>
+                      <div className="text-gray-600">
                         Download all your progress as JSON
                       </div>
                     </div>
                     <button
                       onClick={exportData}
-                      className="px-6 py-3 bg-gradient-to-r from-blue-400 to-cyan-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
+                      className="px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow"
                     >
                       Export
                     </button>
                   </div>
                 </div>
                 
-                <div className="group p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl border border-purple-200 dark:border-purple-800 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                <div className="group p-6 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl border border-violet-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-6">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
-                      <div className="relative p-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl">
+                      <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl blur-lg opacity-50 group-hover:blur-xl transition-all"></div>
+                      <div className="relative p-4 bg-gradient-to-r from-violet-400 to-purple-400 rounded-xl">
                         <Upload className="text-white" size={28} />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-800 dark:text-gray-100 text-lg mb-1">Import Data</div>
-                      <div className="text-gray-600 dark:text-gray-300">
+                      <div className="font-bold text-gray-900 text-lg mb-1">Import Royal Data</div>
+                      <div className="text-gray-700">
                         Restore from backup file
                       </div>
                     </div>
-                    <label className="px-6 py-3 bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow cursor-pointer">
+                    <label className="px-6 py-3 bg-gradient-to-r from-violet-400 to-purple-400 text-white font-bold rounded-xl hover:shadow-lg transition-shadow cursor-pointer">
                       Import
                       <input
                         type="file"
@@ -691,18 +687,18 @@ const App = () => {
         {activeTab === 'tracker' && (
           <div className="space-y-6">
             <div className="glass-card rounded-3xl overflow-hidden">
-              <div className="p-8 bg-gradient-to-r from-amber-400 to-orange-400">
+              <div className="p-8 bg-gradient-to-r from-purple-600 to-indigo-600">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <Calendar className="text-white" size={28} />
                     <h2 className="text-2xl font-black text-white">
-                      {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} {year} - Habit Tracker
+                      {new Date(year, currentMonth).toLocaleString('default', { month: 'long' })} {year} - Royal Habit Tracker
                     </h2>
                   </div>
                   <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl">
                     <TargetIcon className="text-white" size={18} />
                     <span className="text-white font-bold">
-                      Click on days to mark habits
+                      Click on days to mark royal habits
                     </span>
                   </div>
                 </div>
@@ -711,13 +707,13 @@ const App = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-amber-100 dark:border-gray-700">
-                      <th className="text-left p-6 font-black text-gray-700 dark:text-gray-300 sticky left-0 bg-gradient-to-r from-white to-amber-50 dark:from-gray-800 dark:to-gray-700">
+                    <tr className="border-b border-purple-100">
+                      <th className="text-left p-6 font-black text-gray-700 sticky left-0 bg-gradient-to-r from-white to-purple-50">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-gradient-to-r from-amber-400 to-orange-400 rounded-lg">
+                          <div className="p-2 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg">
                             <Calendar className="text-white" size={20} />
                           </div>
-                          <span className="text-lg">Habits</span>
+                          <span className="text-lg">Royal Habits</span>
                         </div>
                       </th>
                       {Array.from({ length: getDaysInMonth(currentMonth, year) }, (_, i) => i + 1).map(day => {
@@ -730,10 +726,10 @@ const App = () => {
                             key={day}
                             className={`text-center p-3 font-bold ${
                               isToday 
-                                ? 'bg-gradient-to-r from-amber-400 to-orange-400 text-white' 
+                                ? 'bg-gradient-to-r from-purple-400 to-indigo-400 text-white' 
                                 : isWeekend
-                                ? 'text-gray-400 dark:text-gray-500'
-                                : 'text-gray-700 dark:text-gray-300'
+                                ? 'text-purple-400'
+                                : 'text-gray-700'
                             }`}
                           >
                             <div className="text-lg">{day}</div>
@@ -743,8 +739,8 @@ const App = () => {
                           </th>
                         );
                       })}
-                      <th className="text-center p-6 font-black text-gray-700 dark:text-gray-300 bg-gradient-to-r from-white to-amber-50 dark:from-gray-800 dark:to-gray-700">
-                        Stats
+                      <th className="text-center p-6 font-black text-gray-700 bg-gradient-to-r from-white to-purple-50">
+                        Royal Stats
                       </th>
                     </tr>
                   </thead>
@@ -754,16 +750,16 @@ const App = () => {
                       const emoji = getProgressEmoji(stats.progress);
                       
                       return (
-                        <tr key={habit.id} className="border-b border-amber-50 dark:border-gray-700 hover:bg-amber-50/50 dark:hover:bg-gray-800/50 transition-colors">
-                          <td className="p-6 sticky left-0 bg-gradient-to-r from-white to-amber-50 dark:from-gray-800 dark:to-gray-700">
+                        <tr key={habit.id} className="border-b border-purple-50 hover:bg-purple-50/50 transition-colors">
+                          <td className="p-6 sticky left-0 bg-gradient-to-r from-white to-purple-50">
                             <div className="flex items-center gap-4">
                               <div className="relative">
-                                <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full blur-md opacity-50"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-md opacity-50"></div>
                                 <span className="relative text-3xl">{habit.emoji}</span>
                               </div>
                               <div>
-                                <div className="font-bold text-gray-800 dark:text-gray-100">{habit.name}</div>
-                                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                <div className="font-bold text-gray-800">{habit.name}</div>
+                                <div className="text-sm font-medium text-gray-600">
                                   Target: {habit.target}/month
                                 </div>
                               </div>
@@ -784,10 +780,10 @@ const App = () => {
                                   className={`
                                     w-12 h-12 mx-auto rounded-xl flex items-center justify-center transition-all duration-200
                                     ${isCompleted
-                                      ? 'bg-gradient-to-br from-green-400 to-emerald-400 text-white shadow-lg hover:shadow-xl'
+                                      ? 'bg-gradient-to-br from-purple-400 to-indigo-400 text-white shadow-lg hover:shadow-xl'
                                       : isToday
-                                      ? 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600 dark:text-amber-400 shadow'
-                                      : 'bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-700 text-gray-500 dark:text-gray-400 hover:shadow-lg'
+                                      ? 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 shadow'
+                                      : 'bg-gradient-to-br from-purple-50 to-indigo-50 text-gray-500 hover:shadow-lg'
                                     }
                                     ${isFuture ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'}
                                   `}
@@ -804,24 +800,24 @@ const App = () => {
                             );
                           })}
                           
-                          <td className="p-6 bg-gradient-to-r from-white to-amber-50 dark:from-gray-800 dark:to-gray-700">
+                          <td className="p-6 bg-gradient-to-r from-white to-purple-50">
                             <div className="flex flex-col gap-4">
                               <div className="flex items-center justify-between">
-                                <span className="font-medium text-gray-500 dark:text-gray-400">Total:</span>
-                                <span className="font-black text-2xl text-gray-800 dark:text-gray-100">{stats.total}</span>
+                                <span className="font-medium text-gray-600">Total:</span>
+                                <span className="font-black text-2xl text-gray-800">{stats.total}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="font-medium text-gray-500 dark:text-gray-400">Streak:</span>
+                                <span className="font-medium text-gray-600">Streak:</span>
                                 <div className="flex items-center gap-2">
-                                  <Flame size={18} className={stats.currentStreak > 0 ? 'text-red-400' : 'text-gray-400'} />
-                                  <span className="font-bold text-lg text-gray-800 dark:text-gray-100">{stats.currentStreak}</span>
+                                  <Flame size={18} className={stats.currentStreak > 0 ? 'text-violet-400' : 'text-purple-400'} />
+                                  <span className="font-bold text-lg text-gray-800">{stats.currentStreak}</span>
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="font-medium text-gray-500 dark:text-gray-400">Progress:</span>
+                                <span className="font-medium text-gray-600">Progress:</span>
                                 <div className="flex items-center gap-3">
                                   <span className="text-3xl">{emoji}</span>
-                                  <span className="font-black text-2xl text-gray-800 dark:text-gray-100">{Math.round(stats.progress)}%</span>
+                                  <span className="font-black text-2xl text-gray-800">{Math.round(stats.progress)}%</span>
                                 </div>
                               </div>
                             </div>
@@ -833,13 +829,13 @@ const App = () => {
                 </table>
                 
                 {habits.length > 7 && !showHiddenRows && (
-                  <div className="p-6 text-center bg-gradient-to-r from-amber-50 to-orange-50 dark:from-gray-800 dark:to-gray-700">
+                  <div className="p-6 text-center bg-gradient-to-r from-purple-50 to-indigo-50">
                     <button
                       onClick={() => setShowHiddenRows(true)}
-                      className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                      className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
                     >
                       <ChevronDown size={20} />
-                      Show {habits.length - 7} more habits
+                      Show {habits.length - 7} more royal habits
                     </button>
                   </div>
                 )}
@@ -848,21 +844,21 @@ const App = () => {
 
             {/* Stats Summary */}
             <div className="glass-card rounded-3xl p-8">
-              <h2 className="text-2xl font-black text-gray-800 dark:text-gray-100 mb-6">Monthly Summary</h2>
+              <h2 className="text-2xl font-black text-gray-800 mb-6">Royal Monthly Summary</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
                     <Crown className="text-yellow-400" size={24} />
-                    <h3 className="font-bold text-gray-700 dark:text-gray-300">Top Performers</h3>
+                    <h3 className="font-bold text-gray-700">Royal Top Performers</h3>
                   </div>
                   {habits
                     .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                     .sort((a, b) => b.stats.progress - a.stats.progress)
                     .slice(0, 3)
                     .map((habit, index) => (
-                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-700 rounded-xl border border-green-200 dark:border-green-800">
+                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-yellow-400 to-amber-400 rounded-lg font-bold text-white">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-purple-400 to-indigo-400 rounded-lg font-bold text-white">
                             {index + 1}
                           </div>
                           <div className="flex items-center gap-3">
@@ -870,7 +866,7 @@ const App = () => {
                             <span className="font-medium">{habit.name}</span>
                           </div>
                         </div>
-                        <span className="font-black text-2xl text-green-600 dark:text-green-400">
+                        <span className="font-black text-2xl text-purple-600">
                           {Math.round(habit.stats.progress)}%
                         </span>
                       </div>
@@ -879,17 +875,17 @@ const App = () => {
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <TargetIcon className="text-orange-400" size={24} />
-                    <h3 className="font-bold text-gray-700 dark:text-gray-300">Need Attention</h3>
+                    <TargetIcon className="text-violet-400" size={24} />
+                    <h3 className="font-bold text-gray-700">Need Royal Attention</h3>
                   </div>
                   {habits
                     .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                     .sort((a, b) => a.stats.progress - b.stats.progress)
                     .slice(0, 3)
                     .map((habit, index) => (
-                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-700 rounded-xl border border-orange-200 dark:border-orange-800">
+                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl border border-violet-200">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-orange-400 to-red-400 rounded-lg font-bold text-white">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-violet-400 to-purple-400 rounded-lg font-bold text-white">
                             {index + 1}
                           </div>
                           <div className="flex items-center gap-3">
@@ -897,7 +893,7 @@ const App = () => {
                             <span className="font-medium">{habit.name}</span>
                           </div>
                         </div>
-                        <span className="font-black text-2xl text-orange-600 dark:text-orange-400">
+                        <span className="font-black text-2xl text-violet-600">
                           {Math.round(habit.stats.progress)}%
                         </span>
                       </div>
@@ -906,25 +902,25 @@ const App = () => {
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <Flame className="text-red-400" size={24} />
-                    <h3 className="font-bold text-gray-700 dark:text-gray-300">Current Streaks</h3>
+                    <Flame className="text-fuchsia-400" size={24} />
+                    <h3 className="font-bold text-gray-700">Royal Streaks</h3>
                   </div>
                   {habits
                     .map(habit => ({ ...habit, stats: getHabitStats(habit.id, currentMonth) }))
                     .sort((a, b) => b.stats.currentStreak - a.stats.currentStreak)
                     .slice(0, 3)
                     .map((habit, index) => (
-                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-rose-50 dark:from-gray-800 dark:to-gray-700 rounded-xl border border-red-200 dark:border-red-800">
+                      <div key={habit.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-fuchsia-50 to-purple-50 rounded-xl border border-fuchsia-200">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-red-400 to-rose-400 rounded-lg font-bold text-white">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-fuchsia-400 to-purple-400 rounded-lg font-bold text-white">
                             {index + 1}
                           </div>
                           <div className="flex items-center gap-3">
-                            <Flame size={20} className={habit.stats.currentStreak > 0 ? 'text-red-400' : 'text-gray-400'} />
+                            <Flame size={20} className={habit.stats.currentStreak > 0 ? 'text-fuchsia-400' : 'text-purple-400'} />
                             <span className="font-medium">{habit.name}</span>
                           </div>
                         </div>
-                        <span className="font-black text-2xl text-red-600 dark:text-red-400">
+                        <span className="font-black text-2xl text-fuchsia-600">
                           {habit.stats.currentStreak} days
                         </span>
                       </div>
@@ -942,46 +938,46 @@ const App = () => {
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl blur-lg opacity-50"></div>
-                    <div className="relative p-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
+                    <div className="relative p-4 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
                       <Settings className="text-white" size={28} />
                     </div>
                   </div>
                   <div>
-                    <h2 className="text-3xl font-black text-gray-800 dark:text-gray-100">Habit Setup & Configuration</h2>
-                    <p className="text-amber-600 dark:text-amber-400 font-medium mt-2">
-                      Customize your habits, targets, and progress emojis
+                    <h2 className="text-3xl font-black text-gray-800">Royal Habit Configuration</h2>
+                    <p className="text-violet-600 font-medium mt-2">
+                      Customize your royal habits, targets, and progress emojis
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-4xl font-black gradient-text">{habits.length}</div>
-                  <div className="text-sm font-bold text-gray-500 dark:text-gray-400">Active Habits</div>
+                  <div className="text-sm font-bold text-gray-600">Royal Habits</div>
                 </div>
               </div>
               
               {/* Add New Habit */}
-              <div className="mb-8 p-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl border-2 border-dashed border-cyan-300 dark:border-cyan-700">
-                <h3 className="font-black text-gray-800 dark:text-gray-100 text-xl mb-6 flex items-center gap-3">
-                  <Plus className="text-cyan-500" size={24} />
-                  Add New Habit
+              <div className="mb-8 p-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl border-2 border-dashed border-purple-300">
+                <h3 className="font-black text-gray-800 text-xl mb-6 flex items-center gap-3">
+                  <Plus className="text-purple-500" size={24} />
+                  Add New Royal Habit
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                      Habit Name
+                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                      Royal Habit Name
                     </label>
                     <input
                       type="text"
                       value={newHabit.name}
                       onChange={(e) => setNewHabit({...newHabit, name: e.target.value})}
                       placeholder="e.g., Drink 2L water daily"
-                      className="w-full px-5 py-4 border-2 border-cyan-300 dark:border-cyan-700 rounded-xl bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                      className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                      Emoji
+                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                      Royal Emoji
                     </label>
                     <div className="relative">
                       <input
@@ -990,13 +986,13 @@ const App = () => {
                         onChange={(e) => setNewHabit({...newHabit, emoji: e.target.value})}
                         placeholder="✨"
                         maxLength="2"
-                        className="w-full px-5 py-4 border-2 border-cyan-300 dark:border-cyan-700 rounded-xl bg-white dark:bg-gray-800 text-center text-3xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                        className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white text-center text-3xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                       />
                     </div>
                   </div>
                   <div className="flex items-end gap-3">
                     <div className="flex-1">
-                      <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
                         Monthly Target
                       </label>
                       <input
@@ -1005,12 +1001,12 @@ const App = () => {
                         max="31"
                         value={newHabit.target}
                         onChange={(e) => setNewHabit({...newHabit, target: parseInt(e.target.value) || 20})}
-                        className="w-full px-5 py-4 border-2 border-cyan-300 dark:border-cyan-700 rounded-xl bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                        className="w-full px-5 py-4 border-2 border-purple-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                       />
                     </div>
                     <button
                       onClick={addHabit}
-                      className="px-6 py-4 bg-gradient-to-r from-cyan-400 to-blue-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                      className="px-6 py-4 bg-gradient-to-r from-purple-400 to-indigo-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
                     >
                       <Plus size={24} />
                     </button>
@@ -1024,10 +1020,10 @@ const App = () => {
                   const stats = getHabitStats(habit.id, currentMonth);
                   
                   return (
-                    <div key={habit.id} className="flex items-center gap-4 p-6 border-2 border-amber-100 dark:border-gray-700 rounded-2xl hover:shadow-lg transition-all">
+                    <div key={habit.id} className="flex items-center gap-4 p-6 border-2 border-purple-100 rounded-2xl hover:shadow-lg transition-all">
                       <button
                         onClick={() => deleteHabit(habit.id)}
-                        className="p-3 bg-gradient-to-r from-red-100 to-rose-100 dark:from-red-900/30 dark:to-rose-900/30 text-red-500 hover:text-red-600 rounded-xl transition-colors"
+                        className="p-3 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors"
                       >
                         <Trash2 size={20} />
                       </button>
@@ -1039,18 +1035,18 @@ const App = () => {
                             value={habit.emoji}
                             onChange={(e) => updateHabit(habit.id, 'emoji', e.target.value)}
                             maxLength="2"
-                            className="w-16 h-16 text-4xl text-center border-2 border-amber-300 dark:border-amber-700 rounded-xl bg-white dark:bg-gray-800"
+                            className="w-16 h-16 text-4xl text-center border-2 border-purple-300 rounded-xl bg-white"
                           />
                           <input
                             type="text"
                             value={habit.name}
                             onChange={(e) => updateHabit(habit.id, 'name', e.target.value)}
-                            className="flex-1 px-4 py-3 border-2 border-amber-300 dark:border-amber-700 rounded-xl bg-white dark:bg-gray-800"
+                            className="flex-1 px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
                           />
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-bold text-gray-500 dark:text-gray-400 mb-2">
+                          <label className="block text-sm font-bold text-gray-600 mb-2">
                             Monthly Target
                           </label>
                           <input
@@ -1059,24 +1055,24 @@ const App = () => {
                             max="31"
                             value={habit.target}
                             onChange={(e) => updateHabit(habit.id, 'target', e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-amber-300 dark:border-amber-700 rounded-xl bg-white dark:bg-gray-800"
+                            className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
                           />
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-bold text-gray-500 dark:text-gray-400 mb-2">
+                          <label className="block text-sm font-bold text-gray-600 mb-2">
                             Current Progress
                           </label>
                           <div className="flex items-center gap-4">
                             <div className="flex-1">
-                              <div className="h-3 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-gray-700 dark:to-gray-600 rounded-full overflow-hidden">
+                              <div className="h-3 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full overflow-hidden">
                                 <div 
                                   className={`h-full rounded-full bg-gradient-to-r ${habit.color}`}
                                   style={{ width: `${Math.min(stats.progress, 100)}%` }}
                                 ></div>
                               </div>
                             </div>
-                            <span className="font-black text-2xl text-gray-800 dark:text-gray-100">{Math.round(stats.progress)}%</span>
+                            <span className="font-black text-2xl text-gray-800">{Math.round(stats.progress)}%</span>
                           </div>
                         </div>
                       </div>
@@ -1089,23 +1085,23 @@ const App = () => {
             {/* Emoji Levels Configuration */}
             <div className="glass-card rounded-3xl p-8">
               <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl">
+                <div className="p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
                   <Gem className="text-white" size={24} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-800 dark:text-gray-100">Progress Emoji Levels</h2>
-                  <p className="text-amber-600 dark:text-amber-400 font-medium mt-1">
-                    Set different emojis that appear as you reach certain completion percentages
+                  <h2 className="text-2xl font-black text-gray-800">Royal Progress Emoji Levels</h2>
+                  <p className="text-violet-600 font-medium mt-1">
+                    Set different royal emojis that appear as you reach certain completion percentages
                   </p>
                 </div>
               </div>
               
               <div className="space-y-4">
                 {emojiLevels.map((level, index) => (
-                  <div key={index} className="flex items-center gap-6 p-6 border-2 border-purple-100 dark:border-purple-900 rounded-2xl">
+                  <div key={index} className="flex items-center gap-6 p-6 border-2 border-purple-100 rounded-2xl">
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-sm font-bold text-gray-700 mb-2">
                           Completion Threshold (%)
                         </label>
                         <input
@@ -1118,12 +1114,12 @@ const App = () => {
                             newLevels[index].threshold = parseInt(e.target.value) || 0;
                             setEmojiLevels(newLevels.sort((a, b) => a.threshold - b.threshold));
                           }}
-                          className="w-full px-4 py-3 border-2 border-purple-300 dark:border-purple-700 rounded-xl bg-white dark:bg-gray-800"
+                          className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                          Display Emoji
+                        <label className="block text-sm font-bold text-gray-700 mb-2">
+                          Royal Emoji
                         </label>
                         <input
                           type="text"
@@ -1134,13 +1130,13 @@ const App = () => {
                             setEmojiLevels([...newLevels]);
                           }}
                           maxLength="2"
-                          className="w-full px-4 py-3 border-2 border-purple-300 dark:border-purple-700 rounded-xl bg-white dark:bg-gray-800 text-3xl text-center"
+                          className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl bg-white text-3xl text-center"
                         />
                       </div>
                     </div>
                     <div className="text-center">
                       <div className="text-5xl mb-2">{level.emoji}</div>
-                      <div className="text-sm font-bold text-gray-500 dark:text-gray-400">
+                      <div className="text-sm font-bold text-gray-600">
                         ≥{level.threshold}%
                       </div>
                     </div>
@@ -1150,9 +1146,9 @@ const App = () => {
               
               <button
                 onClick={() => setEmojiLevels([...emojiLevels, { threshold: 0, emoji: '✨', color: 'from-gray-400 to-gray-300' }])}
-                className="mt-6 px-6 py-4 border-2 border-dashed border-amber-300 dark:border-amber-700 rounded-xl text-amber-600 dark:text-amber-400 font-bold hover:border-amber-400 dark:hover:border-amber-600 transition-colors w-full"
+                className="mt-6 px-6 py-4 border-2 border-dashed border-purple-300 rounded-xl text-purple-600 font-bold hover:border-purple-400 transition-colors w-full"
               >
-                + Add Emoji Level
+                + Add Royal Emoji Level
               </button>
             </div>
           </div>
@@ -1163,33 +1159,33 @@ const App = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 rounded-xl blur-lg opacity-50"></div>
-                <div className="relative p-3 bg-gradient-to-r from-amber-400 to-orange-400 rounded-xl">
-                  <Rocket className="text-white" size={24} />
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl blur-lg opacity-50"></div>
+                <div className="relative p-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-xl">
+                  <Crown className="text-white" size={24} />
                 </div>
               </div>
               <div>
-                <div className="font-black text-gray-800 dark:text-gray-100">Built for Discipline & Growth</div>
-                <div className="text-amber-600 dark:text-amber-400 font-medium">
-                  Track your journey to better habits
+                <div className="font-black text-gray-800">Built for Royal Discipline & Growth</div>
+                <div className="text-violet-600 font-medium">
+                  Track your royal journey to better habits
                 </div>
               </div>
             </div>
             
             <div className="flex items-center gap-8">
               <div className="text-center">
-                <div className="flex items-center gap-2 text-red-500 font-black text-lg">
+                <div className="flex items-center gap-2 text-violet-500 font-black text-lg">
                   <Flame size={18} fill="currentColor" />
                   {getCurrentStreak()} DAY STREAK
                 </div>
-                <div className="text-gray-600 dark:text-gray-300 font-bold">
+                <div className="text-gray-600 font-bold">
                   {getTotalCompletedToday()}/{habits.length} DONE TODAY
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <Clock className="text-amber-500" size={20} />
-                <div className="font-mono font-black text-gray-800 dark:text-gray-100 text-xl">
+                <Clock className="text-purple-500" size={20} />
+                <div className="font-mono font-black text-gray-800 text-xl">
                   {currentTime}
                 </div>
               </div>
